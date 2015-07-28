@@ -1,0 +1,17 @@
+{
+	"default":
+		{
+			"publishManager" : "someFile.txt",
+			"DefaultSearch" : "Google"
+		},
+	"publish_jonathan":
+		{
+			"visible_fields": ["color", "fileSize", "stuff"],
+			"DefaultSearch": "Bing",
+			"multiPublish":
+			{
+				"path": "c:/temp",
+				"search mode" :"sequence"
+			}
+		}
+}
