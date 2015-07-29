@@ -7,7 +7,7 @@ import globalSettings
 class globalSettingsTest(unittest.TestCase):
 
 	def setUp(self):
-		os.environ['ARK_CONFIG'] = 'c:/dev/settingsManager/config/'
+		os.environ['ARK_CONFIG'] = os.path.join(os.getcwd(), '..', 'config')
 		os.environ['ARK_MODE'] = 'default'
 
 	def tearDown(self):
