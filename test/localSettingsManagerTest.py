@@ -22,7 +22,7 @@ class localSettingsManagerTest(unittest.TestCase):
 							'Directory': 'SomeOtherDirectory'
 						}
 					}
-				json.dump(defaultSettings, SettingsFile,indent=4)
+				json.dump(defaultSettings, SettingsFile, indent=4)
 		self.localSettings = SettingsManager('local', 'c:/settings/')
 
 	@classmethod
@@ -34,40 +34,40 @@ class localSettingsManagerTest(unittest.TestCase):
 
 	def test_shouldLoadDefaultSettings(self):
 		self.localSettings.load('PublishManager')
-		self.assertEqual(self.localSettings.getSetting('initialFile'), 'someFile.txt')
-		self.assertEqual(self.localSettings.getSetting('NumberPublished'), 1)
+		self.assertEqual(self.localSettings.get('initialFile'), 'someFile.txt')
+		self.assertEqual(self.localSettings.get('NumberPublished'), 1)
 
 	def test_shouldLoadSpecificSettings(self):
 		self.localSettings.load('PublishManager', 'Grant Miller')
-		self.assertEqual(self.localSettings.getSetting('initialFile'), 'someFile.txt')
-		self.assertEqual(self.localSettings.getSetting('NumberPublished'), 2)
-		self.assertEqual(self.localSettings.getSetting('Directory'), 'SomeOtherDirectory')
-		self.assertEqual(self.localSettings.getSetting('visible_fields'), ['color', 'fileSize', 'stuff'])
+		self.assertEqual(self.localSettings.get('initialFile'), 'someFile.txt')
+		self.assertEqual(self.localSettings.get('NumberPublished'), 2)
+		self.assertEqual(self.localSettings.get('Directory'), 'SomeOtherDirectory')
+		self.assertEqual(self.localSettings.get('visible_fields'), ['color', 'fileSize', 'stuff'])
 
-	def test_shouldGetSetting(self):
+	def test_shouldget(self):
 		self.localSettings.load('PublishManager', 'Grant Miller')
-		self.assertEqual(self.localSettings.getSetting('visible_fields')[1], 'fileSize')
+		self.assertEqual(self.localSettings.get('visible_fields')[1], 'fileSize')
 
-	def test_shouldSetSetting(self):
+	def test_shouldset(self):
 		self.localSettings.load('PublishManager')
-		self.localSettings.setSetting('errorLog', 'c:/fileOfStupidity.txt')
-		self.assertEqual(self.localSettings.getSetting('errorLog'), 'c:/fileOfStupidity.txt')
+		self.localSettings.set('errorLog', 'c:/fileOfStupidity.txt')
+		self.assertEqual(self.localSettings.get('errorLog'), 'c:/fileOfStupidity.txt')
 
 
-	def test_shouldSaveSettings(self):
+	def test_shouldsave(self):
 		self.localSettings.load('PublishManager', 'Grant Miller')
-		self.localSettings.setSetting('background', 'green')
-		self.localSettings.saveSettings()
+		self.localSettings.set('background', 'green')
+		self.localSettings.save()
 		newSettings = SettingsManager('local', 'c:/settings/')
 		newSettings.load('PublishManager', 'Grant Miller')
-		self.assertEqual(newSettings.getSetting('background'), 'green')
+		self.assertEqual(newSettings.get('background'), 'green')
 		newSettings.load('PublishManager')
-		self.assertTrue('background' not in newSettings.getSettings())
+		self.assertTrue('background' not in newSettings.get())
 
 	def test_shouldCreateSettings(self):
 		self.localSettings.create('randomThing')
-		self.localSettings.setSetting('stuffy', 'blahblah')
-		self.localSettings.saveSettings()
+		self.localSettings.set('stuffy', 'blahblah')
+		self.localSettings.save()
 		self.localSettings.create('randomThing', 'Grant Miller')
 
 
