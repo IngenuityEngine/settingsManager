@@ -23,8 +23,9 @@ class globalSettings(object):
 			raise KeyError('%s is not a global setting!' % key)
 
 	def load(self):
-		with open(self.rootDir+'/default.json') as f:
-			self.settings = json.load(f)
+		try:
+			with open(self.rootDir+'/default.json') as f:
+				self.settings = json.load(f)
 		except:
 			raise IOError(self.rootDir+'/default.json could not be found!')
 
@@ -42,9 +43,10 @@ class globalSettings(object):
 	def overrides(self):
 		arkMode = os.environ.get('ARK_MODE', None)
 		if arkMode:
-			with open(self.rootDir+'/'+ arkMode + '.json') as f:
-				extraSettings = json.load(f)
-				self.settings.update(extraSettings)
+			try:
+				with open(self.rootDir+'/'+ arkMode + '.json') as f:
+					extraSettings = json.load(f)
+					self.settings.update(extraSettings)
 			except:
 				pass
 
