@@ -19,3 +19,9 @@ SettingsManager
 	config/someProgram.json
 	config/someProgram.grantmiller.json
 
+
+
+
+import globalSettings
+globalSettings.init(env='arkConfig')
+globalSettings.init(env='arkConfig', config='otherSettings')
