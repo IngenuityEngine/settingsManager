@@ -1,45 +1,112 @@
-from localSettingsManager import LocalSettingsManager
-from databaseSettingsManager import DatabaseSettingsManager
-from settingsInterface import SettingsInterface
+import commentjson as json
+from types import *
+from Settings import Settings
+import os
 
-class SettingsManager(SettingsInterface):
 
-	def __init__(self, backer, options):
-		if backer == 'local':
-			self.settingsManager = LocalSettingsManager(options)
-		elif backer == 'database':
-			self.settingsManager = DatabaseSettingsManager(options)
-		else:
+
+class SettingsManager(Settings):
+
+	def __init__(self, appName=None, user=None):
+		self.appName = appName
+		self.user = user
+		self.settings = {}
+		self.rootDir = os.environ.get('ARK_CONFIG', 'c:/ie/config')
+		self.pathname = self.rootDir + '/' + appName + '.json'
+		self.load()
+		self.runSetupScript()
+		try:
+			self.overrides()
+		except:
 			pass
+		for key in self.settings:
+			setattr(self, key, self.get(key))
 
-	def create(self, key, name=None):
-		if not self.settingsManager:
-			raise NotImplementedError
+	def load(self):
+		try:
+			with open(self.pathname) as f:
+				self.settings = json.load(f)
+		except:
+			raise IOError(self.pathname + ' could not be found!')
+
+	def get(self, key):
+		if key in self.settings:
+				lookup = self.settings[key]
+				return self.formatAnswer(lookup)
 		else:
-			return self.settingsManager.create(key, name)
+			raise KeyError('%s is not a global setting!' % key)
 
-	def load(self, key, name = None):
-		if not self.settingsManager:
-			raise NotImplementedError
+	def formatAnswer(self, key):
+		keyType = type(key)
+		if isinstance(key, StringTypes):
+			return str(key.format(**self.settings))
+		elif keyType == ListType:
+			return [self.formatAnswer(x) for x in key]
+		elif keyType == DictType:
+			return {x: self.formatAnswer(key[x]) for x in key}
 		else:
-			return self.settingsManager.load(key, name)
+			return key
 
-	def save(self, saveAs=None):
-		if not self.settingsManager:
-			raise NotImplementedError
+	def overrides(self):
+		if self.user:
+			#the pathname is reset to the user specific files
+			self.pathname = self.rootDir + '/' + self.appName + '.' + self.user + '.json'
+			try:
+				with open(self.pathname) as f:
+					extraSettings = json.load(f)
+					self.settings.update(extraSettings)
+			except:
+				raise IOError('This user does not exist yet!')
+
+	# runSetupScript is an abstract function; if a particular settings manager
+	# needs to programmatically set settings it can be done here
+	# settings run by runSetupScript can still be overriden by user-specific settings in
+	# their config file
+	def runSetupScript(self):
+		pass
+
+	def create(self):
+		try:
+			self.overrides()
+		except:
+			with open(self.pathname, 'w') as f:
+				print('{0} has just gotten a settings file created at {1}'.format(self.user, self.pathname))
+		return self
+
+	@classmethod
+	def create(self, appName, user=None):
+		if user:
+			pathname = os.environ.get('ARK_CONFIG', 'c:/ie/config') + '/' + appName + '/' + user + '.json'
 		else:
-			return self.settingsManager.save()
+			pathname = os.environ.get('ARK_CONFIG', 'c:/ie/config') + '/' + appName + '.json'
+		try:
+			with open(pathname) as f:
+				if user:
+					print('{0} already has settings for {1}!'.format(user, appName))
+				else:
+					print('{} already has default settings!'.format(appName))
+				return SettingsManager(appName, user)
+		except:
+			with open(pathname, 'w') as f:
+				if user:
+					print('{0} just made a settings file for {1} at {2}'.format(user, appName, pathname))
+				else:
+					print('Default settings were created for {}'.format(appName))
+				return SettingsManager(appName, user)
 
-	def set(self, key, value = None):
-		if not self.settingsManager:
-			raise NotImplementedError
-		else:
-			return self.settingsManager.set(key, value)
+	def set(self, key, value=None):
+		with open(self.pathname, 'w+') as f:
+			extraSettings = json.load(f)
+			if value:
+				self.settings[key] = value
+				extraSettings[key] = value
+				setattr(self, key, self.get(key))
+			else:
+				self.settings.update(key)
+				extraSettings.update(key)
+				for i in key:
+					setattr(self, i, self.get(i))
+			json.dump(extraSettings, f, indent=4, sort_keys=True)
 
 
-	def get(self, key=None):
-		if not self.settingsManager:
-			raise NotImplementedError
-		else:
-			return self.settingsManager.get(key)
 

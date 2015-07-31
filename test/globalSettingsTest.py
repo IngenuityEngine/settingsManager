@@ -7,7 +7,7 @@ import globalSettings
 class globalSettingsTest(unittest.TestCase):
 
 	def setUp(self):
-		os.environ['ARK_CONFIG'] = os.path.join(os.getcwd(), '..', 'config')
+		os.environ['ARK_CONFIG'] = 'c:/ie/settingsManager/config'
 		os.environ['ARK_MODE'] = 'default'
 
 	def tearDown(self):
@@ -48,11 +48,6 @@ class globalSettingsTest(unittest.TestCase):
 		os.environ['ARK_MODE'] = 'overridetest'
 		arkGlobals = globalSettings.init()
 		self.assertEqual(arkGlobals.DUMMY_ATTR, 'dummy')
-
-
-
-
-
 
 if __name__ == '__main__':
 	unittest.main()

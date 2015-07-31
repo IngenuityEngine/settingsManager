@@ -1,1 +1,0 @@
-{"default": {"publishManager": "someFile.txt", "DefaultSearch": "Google"}, "publish_tester": {"multiPublish": {"path": "c:/temp", "search mode": "sequence"}, "visible_fields": ["color", "fileSize", "stuff"], "DefaultSearch": "Bing"}}

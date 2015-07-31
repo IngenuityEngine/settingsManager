@@ -2,44 +2,15 @@ import os
 import sys
 from types import *
 import commentjson as json
+from SettingsManager import SettingsManager
 
 
-class globalSettings(object):
+class globalSettings(SettingsManager):
+
 	def __init__(self, overrides=None):
-		super(globalSettings, self).__init__()
-		self.settings = {}
-		self.rootDir = os.environ.get('ARK_CONFIG', os.getcwd())
-		self.load()
-		self.runComputerSetup()
-		self.overrides()
-		for key in self.settings:
-			setattr(self, key, self.get(key))
+		super(globalSettings, self).__init__('default')
 
-	def get(self, key):
-		if key in self.settings:
-				lookup = self.settings[key]
-				return self.formatAnswer(lookup)
-		else:
-			raise KeyError('%s is not a global setting!' % key)
-
-	def load(self):
-		try:
-			with open(self.rootDir+'/default.json') as f:
-				self.settings = json.load(f)
-		except:
-			raise IOError(self.rootDir+'/default.json could not be found!')
-
-	def formatAnswer(self, key):
-		keyType = type(key)
-		if isinstance(key, StringTypes):
-			return str(key.format(**self.settings))
-		elif keyType == ListType:
-			return [self.formatAnswer(x) for x in key]
-		elif keyType == DictType:
-			return {x: self.formatAnswer(key[x]) for x in key}
-		else:
-			return key
-
+	#overrides gets overriden as global settings does not follow the <app>.<user>.json naming conventino
 	def overrides(self):
 		arkMode = os.environ.get('ARK_MODE', None)
 		if arkMode:
@@ -50,9 +21,8 @@ class globalSettings(object):
 			except:
 				pass
 
-
-	#runComputerSetup handles all constants which need to be found by lookups in env variable or other means
-	def runComputerSetup(self):
+	#runSetupScript handles all constants which need to be found by lookups in env variable or other means
+	def runSetupScript(self):
 		self.settings['ARK_ROOT'] = os.environ.get('ARK_ROOT')
 		# Tools root is up a dir from wherever ark is installed
 		self.settings['TOOLS_ROOT'] = '/'.join(self.settings['ARK_ROOT'].split('/')[:-2])+'/'

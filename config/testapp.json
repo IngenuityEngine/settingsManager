@@ -1,42 +1,15 @@
 {
-	// Constants set in runComputerSetup:
-	// ARK_ROOT
-	// TOOLS_ROOT
-	// COMPUTER_NAME
-	// OS
-	// ROOT
-	// LOCAL_USERNAME
-	// USERROOT
-	// COMPUTER_TYPE
-	// IS_NODE
-	// COMPUTER_LOCATION
-	// DATABASE_HOST
-	// ARK_CURRENT_APP
-	// programs
-	// NUKE_EXE
-	// nukePath
-	// NETWORK_TOOLSETS
 	"UNIVERSAL_ROOT" : "$root/",
 	"LOCAL_HOST": "127.0.0.1",
-
-	"IETHIRDPARTY": "{ARK_ROOT}thirdParty/",
 	"IEPYTHON": "C:/Python27/python.exe",
 	"IEPYTHONLIB": "C:/Python27/Lib/site-packages/",
 
+	"ONE_THING": "APPTHING",
 	"IETEMP": "C:/ie/temp/",
 	"IELOCALCACHE": "c:/ie/localCache/",
-	"SHEPHERD_ROOT": "{TOOLS_ROOT}shepherd/shepherd",
-	"SHEPHERD_REPOSITORY": "{ROOT}assets/tools/Shepherd/",
 	"SHEPHERD_ADDRESS": "192.168.0.75",
 	"SHEPHERD_PORT": 3000,
 	"SHEPHERD_SOCKETURL": "shepherd/sockets",
-	"MAYA_TOOLS_ROOT" : "{ARK_ROOT}programs/maya/",
-	"MAX_TOOLS_ROOT" : "{ARK_ROOT}programs/max/",
-	"NUKE_TOOLS_ROOT" : "{ARK_ROOT}programs/nuke/",
-	"HIERO_TOOLS_ROOT" : "{ARK_ROOT}programs/hiero/",
-	"HOUDINI_TOOLS_ROOT" : "{ARK_ROOT}programs/houdini/",
-	"MODO_TOOLS_ROOT" : "{ARK_ROOT}programs/modo/",
-	"MAYA_SCRIPT_ROOT" : "{MAYA_TOOLS_ROOT}scripts/",
 	"SHEEPSTATUS": {
 		"offline": 1,
 		"rendering": 2,
@@ -77,9 +50,6 @@
 	"HOUDINI_ROOT": "C:/Program Files/Side Effects Software/Houdini 13.0.547/",
 	"MANTRA_EXE": "{HOUDINI_ROOT}bin/mantra.exe",
 	"HOUDINI_EXE": "{HOUDINI_ROOT}bin/houdinifx.exe",
-	"VRAY_IMG_EXE": "{IETHIRDPARTY}vray/vrimg2exr.exe",
-	"VRAY_LICENSE_PATH": "{IETHIRDPARTY}vray/vrlclient.xml",
-	"CONVERTER_PATH": "{NUKE_TOOLS_ROOT}python/imageConverter.py",
 	"WORKSPACE_FOLDERS": "R:/Assets/Tools/Folders/workspaceFolders",
 	"PROJECT_FOLDERS": "R:/Assets/Tools/Folders/projectFolders",
 
@@ -99,8 +69,6 @@
 	"PROGRAMS": {
 		"ae": "{AE_EXE}",
 		"houdini": "{HOUDINI_EXE}",
-		"convert": "{NUKE_EXE}",
-		"nuke": "{NUKE_EXE}",
 		"mantra": "{MANTRA_EXE}",
 		"3dsmax": "{MAX_EXE}",
 		"maxwell": "{MAXWELL_EXE}",

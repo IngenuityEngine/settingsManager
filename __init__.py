@@ -1,3 +1,2 @@
-from localSettingsManager import LocalSettingsManager
-from databaseSettingsManager import DatabaseSettingsManager
+from SettingsManager import SettingsManager
 from globalSettings import globalSettings
