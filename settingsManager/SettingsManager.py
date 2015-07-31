@@ -27,7 +27,7 @@ class SettingsManager(Settings):
 			with open(self.pathname) as f:
 				self.settings = json.load(f)
 		except:
-			raise IOError(self.pathname + ' could not be found!')
+			raise
 
 	def get(self, key):
 		if key in self.settings:
@@ -39,7 +39,10 @@ class SettingsManager(Settings):
 	def formatAnswer(self, key):
 		keyType = type(key)
 		if isinstance(key, StringTypes):
-			return str(key.format(**self.settings))
+			completedResult = key
+			while '{' in completedResult:
+				completedResult = completedResult.format(**self.settings)
+			return completedResult
 		elif keyType == ListType:
 			return [self.formatAnswer(x) for x in key]
 		elif keyType == DictType:

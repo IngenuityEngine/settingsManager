@@ -10,7 +10,7 @@ class genericSettingsTest(unittest.TestCase):
 		os.environ['ARK_CONFIG'] = 'c:/ie/settingsManager/config'
 
 	def tearDown(self):
-		del os.environ['ARK_CONFIG']
+		os.environ['ARK_CONFIG'] = 'c:/ie/config'
 
 	def test_shouldRetrieveLiteralString(self):
 		appSettings = SettingsManager('testapp')
