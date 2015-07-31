@@ -42,7 +42,7 @@ class SettingsManager(Settings):
 			completedResult = key
 			while '{' in completedResult:
 				completedResult = completedResult.format(**self.settings)
-			return completedResult
+			return str(completedResult)
 		elif keyType == ListType:
 			return [self.formatAnswer(x) for x in key]
 		elif keyType == DictType:
