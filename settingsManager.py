@@ -76,7 +76,7 @@ class SettingsManager(Settings):
 	@classmethod
 	def create(self, appName, user=None):
 		if user:
-			pathname = os.environ.get('ARK_CONFIG', 'c:/ie/config') + '/' + appName + '/' + user + '.json'
+			pathname = os.environ.get('ARK_CONFIG', 'c:/ie/config') + '/' + appName + '.' + user + '.json'
 		else:
 			pathname = os.environ.get('ARK_CONFIG', 'c:/ie/config') + '/' + appName + '.json'
 		try:
