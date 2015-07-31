@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"Settings",
+				"SettingsManager"
+			],
+			[
+				"Setting",
+				"SettingsManager"
+			],
+			[
 				"update",
 				"updatedJob"
 			],
@@ -506,24 +514,51 @@
 			[
 				"display",
 				"displayField"
-			],
-			[
-				"len",
-				"linkEntityType"
-			],
-			[
-				"throw",
-				"throwErr"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
+			"contents": "import os\nimport sys\nfrom types import *\nimport commentjson as json\nfrom SettingsManager import SettingsManager\n\n\nclass globalSettings(SettingsManager):\n\n	def __init__(self, overrides=None):\n		super(globalSettings, self).__init__('default')\n\n	#overrides gets overriden as global settings does not follow the <app>.<user>.json naming conventino\n	def overrides(self):\n		arkMode = os.environ.get('ARK_MODE', None)\n		if arkMode:\n			try:\n				with open(self.rootDir+'/'+ arkMode + '.json') as f:\n					extraSettings = json.load(f)\n					self.settings.update(extraSettings)\n			except:\n				pass\n\n	#runSetupScript handles all constants which need to be found by lookups in env variable or other means\n	def setup(self):\n		self.settings['ARK_ROOT'] = os.environ.get('ARK_ROOT')\n		# Tools root is up a dir from wherever ark is installed\n		self.settings['TOOLS_ROOT'] = '/'.join(self.settings['ARK_ROOT'].split('/')[:-2])+'/'\n\n		#OS Setup\n		#########################################################\n		OS = 'windows'\n		if sys.platform == 'darwin':\n			OS = 'mac'\n		elif sys.platform == 'linux2':\n			OS = 'linux'\n		self.settings['OS'] = OS\n		if 'ROOT' in os.environ:\n			ROOT = os.getenv('ROOT')\n		elif sys.platform == 'win32':\n			ROOT = 'R:/'\n		else:\n			# fix: who knows, stupid macs\n			raise Exception('Invalid system type: ' + sys.platform)\n			ROOT = 'volumes/raidcharles/'\n		self.settings['ROOT'] = ROOT\n		self.settings['LOCAL_USERNAME'] = os.environ.get('USERNAME')\n		if OS =='windows':\n			self.settings['USERROOT'] = 'c:/users/{LOCAL_USERNAME}/'\n		self.settings['COMPUTER_NAME'] = os.getenv('COMPUTER_NAME')\n\n		# Computer Setup\n		###############################################################\n		# Get the comp typ from environment variable or guess if it's missing\n		if 'COMPUTER_TYPE' in os.environ:\n			self.settings['COMPUTER_TYPE'] = os.getenv('COMPUTER_TYPE')\n		elif 'RENDER' in os.environ['COMPUTERNAME']:\n			COMPUTER_TYPE = 'renderNode'\n		else:\n			COMPUTER_TYPE = 'workstation'\n		self.settings['COMPUTER_TYPE'] = COMPUTER_TYPE\n\n		self.settings['IS_NODE'] = (COMPUTER_TYPE in ['renderNode', 'ec2'])\n		self.settings['COMPUTER_LOCATION'] = os.environ.get('COMPUTER_LOCATION', 'local')\n\n		#Network Setup\n		###############################################################\n		self.settings['DATABASE_HOST'] = '108.60.58.20' if COMPUTER_TYPE == 'ec2' else '192.168.0.99'\n\n		#Program Paths\n		##############################################################\n		self.settings['ARK_CURRENT_APP'] = os.environ['ARK_CURRENT_APP'].lower() if 'ARK_CURRENT_APP' in os.environ else None\n\n		self.settings['programs'] = os.listdir(self.settings['programsRoot'])\n		self.settings['programs'].sort()\n\n		# Do some extra legwork for Nuke as it changes all the time\n		self.settings['NUKE_EXE'] = '{programsRoot}{nuke_version}/'+self.settings['nuke_version'].split('.')[0]+'.0.exe'\n		self.settings['nukePath'] = os.environ.get('NUKE_PATH')\n		if self.settings['nukePath']:\n			self.settings['NETWORK_TOOLSETS'] = '{nukePath}/ToolSets'\n\ndef init():\n	return globalSettings()\n\n\n\n\n\n\n",
 			"file": "globalSettings.py",
+			"file_size": 3139,
+			"file_write_time": 130827751688374550,
 			"settings":
 			{
-				"buffer_size": 3767,
+				"buffer_size": 3040,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Settings.py",
+			"settings":
+			{
+				"buffer_size": 223,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "SettingsManager.py",
+			"settings":
+			{
+				"buffer_size": 2923,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "config/default.json",
+			"settings":
+			{
+				"buffer_size": 3277,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "test/SettingsManagerTest.py",
+			"settings":
+			{
+				"buffer_size": 1571,
 				"line_ending": "Windows"
 			}
 		}
@@ -604,6 +639,7 @@
 	},
 	"file_history":
 	[
+		"/C/ie/settingsManager/test/localSettingsManagerTest.py",
 		"/C/ie/shepherd/shepherd/server/databases/database.js",
 		"/C/dev/coren/python/test/test_coren.py",
 		"/C/ie/shepherd/shepherd/server/databases/shepherd_coren.js",
@@ -730,8 +766,7 @@
 		"/C/dev/ingenuity_site/client/styles/base.styl",
 		"/C/dev/ingenuity_site/shared/components/ingenuity_app/styles/ingenuity_app.styl",
 		"/C/dev/ingenuity_site/client/main.js",
-		"/C/dev/ingenuity_site/client/styles/ingenuity_variables.styl",
-		"/C/dev/ingenuity_site/shared/components/ingenuity_app/styles/ingenuity_navbar.styl"
+		"/C/dev/ingenuity_site/client/styles/ingenuity_variables.styl"
 	],
 	"find":
 	{
@@ -777,6 +812,11 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"ARK_ROOT",
+			".init('testapp')",
+			"init()",
+			"arkGlobals",
+			"globalSettings",
 			"var helpers = require('coren/shared/util/helpers')",
 			"shared/util/helpers",
 			"coren/shared/util/helpers",
@@ -899,12 +939,7 @@
 			"rows",
 			"script",
 			"conn",
-			"mysql",
-			"contentFields",
-			"getOgProjectInfo",
-			"matchContent",
-			"fix",
-			"script"
+			"mysql"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -912,6 +947,11 @@
 		"regex": false,
 		"replace_history":
 		[
+			"UNIVERSAL_ROOT",
+			"('testapp')",
+			"init('testapp')",
+			"appSettings",
+			"SettingsManager",
 			"var helpers = require('arkutil')",
 			"QtCore.Signal",
 			"\\t",
@@ -1052,15 +1092,15 @@
 					"file": "globalSettings.py",
 					"settings":
 					{
-						"buffer_size": 3767,
+						"buffer_size": 3040,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								430,
-								430
+								700,
+								700
 							]
 						],
 						"settings":
@@ -1167,7 +1207,131 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 756.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "Settings.py",
+					"settings":
+					{
+						"buffer_size": 223,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								223,
+								223
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"asi": true,
+								"bitwise": true,
+								"browser": true,
+								"evil": true,
+								"immed": true,
+								"latedef": true,
+								"multistr": true,
+								"noarg": true,
+								"node": true,
+								"noempty": true,
+								"plusplus": true,
+								"smarttabs": true,
+								"trailing": true,
+								"undef": true,
+								"unused": true
+							},
+							"pep8": false,
+							"pep8_ignore":
+							[
+								"W191"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": true,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Python/Python.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1175,8 +1339,384 @@
 			]
 		},
 		{
+			"selected": 0,
 			"sheets":
 			[
+				{
+					"buffer": 2,
+					"file": "SettingsManager.py",
+					"settings":
+					{
+						"buffer_size": 2923,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1322,
+								1322
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"asi": true,
+								"bitwise": true,
+								"browser": true,
+								"evil": true,
+								"immed": true,
+								"latedef": true,
+								"multistr": true,
+								"noarg": true,
+								"node": true,
+								"noempty": true,
+								"plusplus": true,
+								"smarttabs": true,
+								"trailing": true,
+								"undef": true,
+								"unused": true
+							},
+							"pep8": false,
+							"pep8_ignore":
+							[
+								"W191"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": true,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 420.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "config/default.json",
+					"settings":
+					{
+						"buffer_size": 3277,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1870,
+								1870
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"asi": true,
+								"bitwise": true,
+								"browser": true,
+								"evil": true,
+								"immed": true,
+								"latedef": true,
+								"multistr": true,
+								"noarg": true,
+								"node": true,
+								"noempty": true,
+								"plusplus": true,
+								"smarttabs": true,
+								"trailing": true,
+								"undef": true,
+								"unused": true
+							},
+							"pep8": false,
+							"pep8_ignore":
+							[
+								"W191"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": true,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 336.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "test/SettingsManagerTest.py",
+					"settings":
+					{
+						"buffer_size": 1571,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1195,
+								1195
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"asi": true,
+								"bitwise": true,
+								"browser": true,
+								"evil": true,
+								"immed": true,
+								"latedef": true,
+								"multistr": true,
+								"noarg": true,
+								"node": true,
+								"noempty": true,
+								"plusplus": true,
+								"smarttabs": true,
+								"trailing": true,
+								"undef": true,
+								"unused": true
+							},
+							"pep8": false,
+							"pep8_ignore":
+							[
+								"W191"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": true,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
 			]
 		}
 	],
@@ -1208,7 +1748,7 @@
 		"cols":
 		[
 			0.0,
-			0.370759324399,
+			0.427395480005,
 			1.0
 		],
 		"rows":

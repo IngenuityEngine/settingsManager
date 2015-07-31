@@ -14,7 +14,7 @@ class SettingsManager(Settings):
 		self.rootDir = os.environ.get('ARK_CONFIG', 'c:/ie/config')
 		self.pathname = self.rootDir + '/' + appName + '.json'
 		self.load()
-		self.runSetupScript()
+		self.setup()
 		try:
 			self.overrides()
 		except:
@@ -62,16 +62,8 @@ class SettingsManager(Settings):
 	# needs to programmatically set settings it can be done here
 	# settings run by runSetupScript can still be overriden by user-specific settings in
 	# their config file
-	def runSetupScript(self):
+	def setup(self):
 		pass
-
-	def create(self):
-		try:
-			self.overrides()
-		except:
-			with open(self.pathname, 'w') as f:
-				print('{0} has just gotten a settings file created at {1}'.format(self.user, self.pathname))
-		return self
 
 	@classmethod
 	def create(self, appName, user=None):
