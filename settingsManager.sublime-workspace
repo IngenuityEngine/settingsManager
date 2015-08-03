@@ -523,7 +523,7 @@
 			"file": "settingsManager/SettingsManager.py",
 			"settings":
 			{
-				"buffer_size": 2978,
+				"buffer_size": 2983,
 				"line_ending": "Windows"
 			}
 		},
@@ -1073,7 +1073,7 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -1081,7 +1081,7 @@
 					"file": "settingsManager/SettingsManager.py",
 					"settings":
 					{
-						"buffer_size": 2978,
+						"buffer_size": 2983,
 						"regions":
 						{
 						},
@@ -1213,8 +1213,8 @@
 						"selection":
 						[
 							[
-								481,
-								481
+								1234,
+								1234
 							]
 						],
 						"settings":
@@ -1329,7 +1329,7 @@
 			]
 		},
 		{
-			"selected": 0,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -1344,8 +1344,8 @@
 						"selection":
 						[
 							[
-								1870,
-								1870
+								3155,
+								3155
 							]
 						],
 						"settings":
@@ -1452,7 +1452,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 336.0,
+						"translation.y": 113.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1469,8 +1469,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								1334,
+								1334
 							]
 						],
 						"settings":
