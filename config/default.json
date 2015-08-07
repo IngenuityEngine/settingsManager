@@ -25,7 +25,7 @@
 
 	"IETEMP": "C:/ie/temp/",
 	"IELOCALCACHE": "c:/ie/localCache/",
-	"SHEPHERD_ROOT": "{TOOLS_ROOT}shepherd/shepherd",
+	"SHEPHERD_ROOT": "{TOOLS_ROOT}shepherd/shepherd/",
 	"SHEPHERD_REPOSITORY": "{ROOT}assets/tools/Shepherd/",
 	"SHEPHERD_ADDRESS": "192.168.0.75",
 	"SHEPHERD_PORT": 3000,
@@ -80,8 +80,8 @@
 	"VRAY_IMG_EXE": "{IETHIRDPARTY}vray/vrimg2exr.exe",
 	"VRAY_LICENSE_PATH": "{IETHIRDPARTY}vray/vrlclient.xml",
 	"CONVERTER_PATH": "{NUKE_TOOLS_ROOT}python/imageConverter.py",
-	"WORKSPACE_FOLDERS": "R:/Assets/Tools/Folders/workspaceFolders",
-	"PROJECT_FOLDERS": "R:/Assets/Tools/Folders/projectFolders",
+	"WORKSPACE_FOLDERS": "R:/Assets/Tools/Folders/workspaceFolders/",
+	"PROJECT_FOLDERS": "R:/Assets/Tools/Folders/projectFolders/",
 
 	"THUMBNAIL_WIDTH": 480,
 	"THUMBNAIL_HEIGHT": 270,
