@@ -47,7 +47,7 @@ class globalSettings(SettingsManager):
 		self.settings['LOCAL_USERNAME'] = os.environ.get('USERNAME')
 		if OS =='windows':
 			self.settings['USERROOT'] = 'c:/users/{LOCAL_USERNAME}/'
-		self.settings['COMPUTER_NAME'] = os.getenv('COMPUTER_NAME')
+		self.settings['COMPUTER_NAME'] = os.getenv('COMPUTERNAME')
 
 		# Computer Setup
 		###############################################################
