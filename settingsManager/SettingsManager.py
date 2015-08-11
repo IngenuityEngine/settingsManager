@@ -46,7 +46,7 @@ class SettingsManager(Settings):
 		elif keyType == ListType:
 			return [self.formatAnswer(x) for x in key]
 		elif keyType == DictType:
-			return {x: self.formatAnswer(key[x]) for x in key}
+			return {self.formatAnswer(x): self.formatAnswer(key[x]) for x in key}
 		else:
 			return key
 
