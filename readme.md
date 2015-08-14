@@ -9,10 +9,10 @@ SettingsManager has two main classes currently:
 
 globalSettings is meant for GLOBAL configurations. Once you initialize it, you should be able to get the global settings through dot notation. EG:
 
-import settingsManager
-globalSettings = settingsManager.globalSettings()
-
-ark_root = globalSettings.ARK_ROOT
+   import settingsManager
+   globalSettings = settingsManager.globalSettings()
+   
+   ark_root = globalSettings.ARK_ROOT
 
 settingsManager.SettingsManager works exactly the same, but is intended to give you application-specific, and if needs be, user-specific settings.
 
