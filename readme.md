@@ -15,14 +15,14 @@ globalSettings is meant for GLOBAL configurations. Once you initialize it, you s
    ark_root = globalSettings.ARK_ROOT
 ```
 settingsManager.SettingsManager works exactly the same, but is intended to give you application-specific, and if needs be, user-specific settings.
-
+```
 import settingsManager
 nukeSettings = settingsManager.SettingsManager('Nuke')
 last_project = settingsManager.LAST_PROJECT
 
 randoNukeSettings = settingsManager.SettingsManager('Nuke', 'Rando')
 RandosLast_Project = settingsManager.LAST_PROJECT
-
+```
 (Here, Rando may have a different setting for last project.)
 
 ## Config files
