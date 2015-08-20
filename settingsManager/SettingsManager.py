@@ -58,6 +58,8 @@ class SettingsManager(Settings):
 				with open(self.pathname) as f:
 					extraSettings = json.load(f)
 					self.settings.update(extraSettings)
+					for setting in extraSettings:
+						setattr(self, setting, self.get(setting))
 			except:
 				raise IOError('This user does not exist yet!')
 

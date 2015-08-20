@@ -54,9 +54,9 @@ class databaseSettingsManagerTest(unittest.TestCase):
 	@classmethod
 	def tearDownClass(self):
 		coren = Coren(corenUrl)
-		coren.delete('settings').execute()
-		coren.delete('settings').execute()
-		coren.delete('_user').where('name','is','TestingUser').execute()
+		coren.remove('settings').execute()
+		coren.remove('settings').execute()
+		coren.remove('_user').where('name','is','TestingUser').execute()
 
 	@classmethod
 	def setUp(self):
