@@ -1,9 +1,8 @@
 var _ = require('lodash')
 var Class = require('uberclass')
 var arkUtil = require('arkutil')
-var fs = require('fs')
 
-var globalSettings = module.exports = Class.extend({
+module.exports = Class.extend({
 
 init: function(searchpaths, modes)
 {
@@ -21,17 +20,8 @@ init: function(searchpaths, modes)
 			try
 			{
 				var settings = require(searchpath+'/'+ mode)
-				_.each(_.keys(settings), function(key)
-				{
-					if (!self[key])
-					{
-						self[key] = settings[key]
-						self.settings[key] = settings[key]
-					}
-					else
-						self[key] = _.merge(self[key], settings[key])
-						self.settings[key] = _.merge(self.settings[key], settings[key])
-				})
+				_.merge(self, settings)
+				_.merge(self.settings, settings)
 			}
 			catch (err)
 			{

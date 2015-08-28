@@ -3,8 +3,8 @@
 var _ = require('lodash')
 var it = global.it
 var describe = global.describe
-var chai = require('chai')
-var expect = chai.expect
+var expect = require('expect.js')
+var config = require('../config/test')
 
 var GlobalSettings = require('../settingsManager/globalSettings')
 
@@ -20,8 +20,8 @@ it('should init', function()
 	expect(globalSettings).to.not.equal(undefined)
 })
 
-var firstPath = 'c:/ie/settingsManager/test/testSettings'
-var secondPath = 'c:/ie/settingsManager/test/moreTestSettings'
+var firstPath = config.firstPath
+var secondPath = config.secondPath
 
 it('should load in config from one path, one mode', function()
 {

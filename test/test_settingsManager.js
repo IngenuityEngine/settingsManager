@@ -4,19 +4,19 @@
 var async = require('async')
 var it = global.it
 var describe = global.describe
-var chai = require('chai')
-var expect = chai.expect
+var expect = require('expect.js')
 
 
 
 //Our Modules
 ///////////////////////
 // var helpers = require('arkutil')
+var config = require('../config/test')
 var it = global.it
 var before = global.before
 var after = global.after
-var Database = require('c:/ie/database/')
-var SettingsManager = require('c:/ie/settingsManager/settingsManager/settingsManager')
+var Database = require(config.databasePath)
+var SettingsManager = require('../settingsManager/settingsManager')
 
 
 describe('test/test_settingsManager', function()
@@ -26,14 +26,13 @@ before(function(done)
 {
 	var self = this
 
-
 	function createDatabase(callback)
 	{
 		self.database = new Database(
 							{
 								coren:
 								{
-									apiRoot: 'http://127.0.0.1:2160/api/',
+									apiRoot: config.apiRoot,
 									authenticate: false
 								}
 							}, callback)

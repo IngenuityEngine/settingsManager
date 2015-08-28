@@ -1,7 +1,6 @@
 import json
 import sys
 
-sys.path.append('c:\dev\database\python')
 from SettingsManager import SettingsManager
 
 
