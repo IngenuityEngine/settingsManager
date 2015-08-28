@@ -1,0 +1,5 @@
+{
+	"firstTest": "testOne",
+	"listTest": ["apples", "pears"],
+	"dictTest": {"other": "test"}
+}
