@@ -1,0 +1,35 @@
+{
+  "name": "settingsmanager",
+  "version": "1.0.0",
+  "description": "A class that eases the getting and setting of settings through json config files.",
+  "main": "settingsManager.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "async": "^1.4.2",
+    "arkutil": "^0.0.4",
+    "expect": "^1.9.0",
+    "chai": "^3.2.0",
+    "fs": "^0.0.2",
+    "uberclass": "^1.0.1",
+    "lodash": "^3.10.1",
+    "underscore.string": "^3.2.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.5"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IngenuityEngine/settingsManager.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IngenuityEngine/settingsManager/issues"
+  },
+  "homepage": "https://github.com/IngenuityEngine/settingsManager#readme"
+}
