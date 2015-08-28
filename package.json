@@ -1,8 +1,8 @@
 {
   "name": "settingsmanager",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "A class that eases the getting and setting of settings through json config files.",
-  "main": "./settingsManager/settingsManager.js",
+  "main": "./settingsManager/settingsFactory.js",
   "directories": {
     "test": "test"
   },

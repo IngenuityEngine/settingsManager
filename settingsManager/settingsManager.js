@@ -40,7 +40,7 @@ init: function(database, settingsKeys, user, callback)
 				_.each(resp, function(setting)
 					{
 						setting = JSON.parse(setting.settings)
-						_.extend(self, setting)
+						_.merge(self, setting)
 					})
 				cb()
 			})
@@ -63,7 +63,7 @@ init: function(database, settingsKeys, user, callback)
 					_.each(resp, function(setting)
 					{
 						setting = JSON.parse(setting.settings)
-						_.extend(self, setting)
+						_.merge(self, setting)
 					})
 				}
 				return cb()

@@ -12,7 +12,7 @@ var GlobalSettings = require('../settingsManager/globalSettings')
 
 describe('test/test_globalSettings.js', function()
 {
-this.timeout(1000000)
+this.timeout(10000)
 
 it('should init', function()
 {

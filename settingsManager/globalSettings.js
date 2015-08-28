@@ -23,8 +23,14 @@ init: function(searchpaths, modes)
 				var settings = require(searchpath+'/'+ mode)
 				_.each(_.keys(settings), function(key)
 				{
-					self[key] = settings[key]
-					self.settings[key] = settings[key]
+					if (!self[key])
+					{
+						self[key] = settings[key]
+						self.settings[key] = settings[key]
+					}
+					else
+						self[key] = _.merge(self[key], settings[key])
+						self.settings[key] = _.merge(self.settings[key], settings[key])
 				})
 			}
 			catch (err)
