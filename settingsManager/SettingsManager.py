@@ -29,14 +29,14 @@ class SettingsManager(Settings):
 		except:
 			raise
 
-	def _get(self, key):
+	def get(self, key):
 		if key in self.settings:
 				lookup = self.settings[key]
 				return self.formatAnswer(lookup)
 		else:
 			raise KeyError('%s is not a global setting!' % key)
 
-	def _formatAnswer(self, key):
+	def formatAnswer(self, key):
 		keyType = type(key)
 		if isinstance(key, StringTypes):
 			completedResult = key
@@ -104,6 +104,3 @@ class SettingsManager(Settings):
 				for i in key:
 					setattr(self, i, self.get(i))
 			json.dump(extraSettings, f, indent=4, sort_keys=True)
-
-
-
