@@ -1,5 +1,4 @@
 import json
-import sys
 
 from SettingsManager import SettingsManager
 
@@ -25,7 +24,7 @@ class DatabaseSettingsManager(SettingsManager):
 		if (self._user):
 			extraSettings = self._database\
 								.find('settings')\
-								.where('key', 'is', token)\
+								.where('key', 'is', self._token)\
 								.where('user', 'is', self._user)\
 								.execute()
 			if extraSettings:
@@ -33,14 +32,14 @@ class DatabaseSettingsManager(SettingsManager):
 					self._settings.update(setting.settings)
 
 		for setting in self._settings:
-			setattr(self, key, self._get(key))
+			setattr(self, setting, self._get(setting))
 
 		self.set = self._set
 
 		self.save = self._save
 
 	def _set(self, key, value=None):
-		if value = None:
+		if value == None:
 			self._settings.update(key)
 			for setting in key:
 				setattr(self, key, self._get(key))
@@ -52,7 +51,7 @@ class DatabaseSettingsManager(SettingsManager):
 		allSettings = json.dumps(self._settings)
 		query = self._database\
 			.update('settings')\
-			.where('key', 'is', token)\
+			.where('key', 'is', self._token)\
 			.set('settings', allSettings)
 		if self._user:
 			query = query.where('user', 'is', self._user)
