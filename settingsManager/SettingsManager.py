@@ -29,14 +29,14 @@ class SettingsManager(Settings):
 		except:
 			raise
 
-	def get(self, key):
+	def _get(self, key):
 		if key in self.settings:
 				lookup = self.settings[key]
 				return self.formatAnswer(lookup)
 		else:
 			raise KeyError('%s is not a global setting!' % key)
 
-	def formatAnswer(self, key):
+	def _formatAnswer(self, key):
 		keyType = type(key)
 		if isinstance(key, StringTypes):
 			completedResult = key

@@ -1,4 +1,5 @@
 var _ = require('lodash')
+var _s = require('underscore.string')
 var async = require('async')
 var Class = require('uberclass')
 var arkUtil = require('arkutil')
@@ -8,10 +9,10 @@ module.exports = Class.extend({
 init: function(database, settingsKeys, user, callback)
 {
 	_.bindAll(this)
-	this.database = database
-	this.user = user
+	this._database = database
+	this._user = user
 	this._save = this.save
-	this._settingsList = []
+	this._settingsKey = settingsKeys
 
 	// user is an optional parameter
 	if (!callback)
@@ -28,7 +29,7 @@ init: function(database, settingsKeys, user, callback)
 
 	function loadBasicSettings(cb)
 	{
-		self.database
+		self._database
 			.find('settings')
 			.where('key', 'in', settingsKeys)
 			.where('user', 'notexists')
@@ -38,8 +39,8 @@ init: function(database, settingsKeys, user, callback)
 					return cb(err)
 				_.each(resp, function(setting)
 					{
-						self[setting.key] = JSON.parse(setting.settings)
-						self._settingsList.push(setting.key)
+						setting = JSON.parse(setting.settings)
+						_.extend(self, setting)
 					})
 				cb()
 			})
@@ -49,7 +50,7 @@ init: function(database, settingsKeys, user, callback)
 	{
 		if (!user)
 			return cb()
-		self.database
+		self._database
 			.find('settings')
 			.where('key', 'in', settingsKeys)
 			.where('user', 'is', user)
@@ -61,10 +62,8 @@ init: function(database, settingsKeys, user, callback)
 				{
 					_.each(resp, function(setting)
 					{
-						if (!_.isUndefined(self[setting.key]))
-							_.extend(self[setting.key], JSON.parse(setting.settings))
-						else
-							self[setting.key] = JSON.parse(setting.settings)
+						setting = JSON.parse(setting.settings)
+						_.extend(self, setting)
 					})
 				}
 				return cb()
@@ -87,33 +86,20 @@ init: function(database, settingsKeys, user, callback)
 save: function(callback)
 {
 	var self = this
-	var funcs = _.collect(this._settingsList, function(key)
+	var settingsToSave = {}
+	_.forOwn(this, function(value, key)
 	{
-		return function updateKey(cb)
-		{
-			var query = self.database
-							.update('settings')
-							.where('key', 'is', key)
-							.set('settings', JSON.stringify(self[key]))
-			if (self.user)
-				query = query.where('user','is', self.user)
-			else
-				query = query.where('user', 'notexists')
-			query.execute(function(err, resp)
-			{
-				if (resp.modified === 0)
-					self.database
-						.create('setting',
-						{
-							'key': key,
-							'settings': JSON.stringify(self[key])
-						}, cb)
-				else
-					cb()
-			})
-		}
+		if (!_s.startsWith(key, '_') && !_.isFunction(value))
+			settingsToSave[key] = value
 	})
+	var query = this._database
+		.update('settings')
+		.where('key', 'is', this._settingsKey)
+		.set('settings', JSON.stringify(settingsToSave))
 
-	async.series(funcs, callback)
+	if (self._user)
+		query = query.where('user', 'is', self._user)
+	query.execute(callback)
+
 }
 })

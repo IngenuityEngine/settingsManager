@@ -15,7 +15,7 @@ var expect = chai.expect
 var it = global.it
 var before = global.before
 var after = global.after
-var Database = require('c:/ie/database/database')
+var Database = require('c:/ie/database/')
 var SettingsManager = require('c:/ie/settingsManager/settingsManager/settingsManager')
 
 
@@ -100,22 +100,22 @@ after(function(done)
 
 	function removeSettings(callback)
 	{
-		self.database
+		var query = self.database
 			.remove('settings')
 			.where('key', 'is', 'testApp')
 			.multiple(true)
-			.execute(callback)
+			query.execute(callback)
 	}
 
 	function removeTestUser(callback)
 	{
-		self.database
+		var query = self.database
 			.remove('user')
 			.where('name', 'is', 'settingsTestUser')
 			.multiple(true)
-			.execute(callback)
+			query.execute(callback)
 	}
-	async.parallel([
+	async.series([
 		removeSettings,
 		removeTestUser
 		], done)
@@ -134,8 +134,8 @@ it('should load in the default settings for a generic app', function(done)
 {
 	var settingsManager = new SettingsManager(this.database, 'testApp', function()
 	{
-		expect(settingsManager.testApp.profile).to.equal('randomUser')
-		expect(settingsManager.testApp.otherThing).to.equal('someOtherSetting')
+		expect(settingsManager.profile).to.equal('randomUser')
+		expect(settingsManager.otherThing).to.equal('someOtherSetting')
 		done()
 	})
 })
@@ -144,9 +144,9 @@ it('should load in the default settings for a user app', function(done)
 {
 	var settingsManager = new SettingsManager(this.database, 'testApp', 'settingsTestUser', function()
 	{
-		expect(settingsManager.testApp.profile).to.equal('otherUser')
-		expect(settingsManager.testApp.otherThing).to.equal('someOtherSetting')
-		expect(settingsManager.testApp.newSetting).to.equal('a personalized setting')
+		expect(settingsManager.profile).to.equal('otherUser')
+		expect(settingsManager.otherThing).to.equal('someOtherSetting')
+		expect(settingsManager.newSetting).to.equal('a personalized setting')
 		done()
 	})
 })
@@ -155,9 +155,9 @@ it('should load in the default settings for a user app', function(done)
 {
 	var settingsManager = new SettingsManager(this.database, 'testApp', this.userID, function()
 	{
-		expect(settingsManager.testApp.profile).to.equal('otherUser')
-		expect(settingsManager.testApp.otherThing).to.equal('someOtherSetting')
-		expect(settingsManager.testApp.newSetting).to.equal('a personalized setting')
+		expect(settingsManager.profile).to.equal('otherUser')
+		expect(settingsManager.otherThing).to.equal('someOtherSetting')
+		expect(settingsManager.newSetting).to.equal('a personalized setting')
 		done()
 	})
 })
@@ -167,24 +167,24 @@ it('should load save settings for a user app', function(done)
 	var self = this
 	var settingsManager = new SettingsManager(this.database, 'testApp', this.userID, function()
 	{
-		expect(settingsManager.testApp.profile).to.equal('otherUser')
-		expect(settingsManager.testApp.otherThing).to.equal('someOtherSetting')
-		expect(settingsManager.testApp.newSetting).to.equal('a personalized setting')
+		expect(settingsManager.profile).to.equal('otherUser')
+		expect(settingsManager.otherThing).to.equal('someOtherSetting')
+		expect(settingsManager.newSetting).to.equal('a personalized setting')
 
-		settingsManager.testApp.newSetting = 'repersonalizedSetting'
-		settingsManager.testApp.otherThing = 'aModifiedSetting'
-		settingsManager.testApp.brandNew  = 'superNew'
+		settingsManager.newSetting = 'repersonalizedSetting'
+		settingsManager.otherThing = 'aModifiedSetting'
+		settingsManager.brandNew  = 'superNew'
 
 		settingsManager.save(function()
 		{
 			var updatedSettings = new SettingsManager(self.database, 'testApp', self.userID, function()
 			{
-				expect(updatedSettings.testApp.profile).to.equal('otherUser')
-				expect(updatedSettings.testApp.otherThing).to.equal('aModifiedSetting')
-				expect(updatedSettings.testApp.newSetting).to.equal('repersonalizedSetting')
-				expect(updatedSettings.testApp.brandNew).to.equal('superNew')
-				updatedSettings.testApp.otherThing = 'someOtherSetting'
-				updatedSettings.testApp.newSetting = 'a personalized setting'
+				expect(updatedSettings.profile).to.equal('otherUser')
+				expect(updatedSettings.otherThing).to.equal('aModifiedSetting')
+				expect(updatedSettings.newSetting).to.equal('repersonalizedSetting')
+				expect(updatedSettings.brandNew).to.equal('superNew')
+				updatedSettings.otherThing = 'someOtherSetting'
+				updatedSettings.newSetting = 'a personalized setting'
 				updatedSettings.save(done)
 			})
 		})
