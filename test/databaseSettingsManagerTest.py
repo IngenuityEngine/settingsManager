@@ -20,8 +20,9 @@ class databaseSettingsManagerTest(unittest.TestCase):
 		#Note: different port number is because database is being run from caretaker
 		# which is where the entitydef for settings lives
 		database = Database(databaseUrl)
+		database.connect()
 		database.create('user', {'name': 'TestingUser'}).execute()
-		userId = database.find('user').where('name','is','TestingUser').execute().json()[0]['_id']
+		userId = database.find('user').where('name','is','TestingUser').execute()[0]['_id']
 		database.create('settings', {
 			'key': 'PublishManager',
 			'settings': json.dumps(
@@ -54,12 +55,14 @@ class databaseSettingsManagerTest(unittest.TestCase):
 	@classmethod
 	def tearDownClass(self):
 		database = Database(databaseUrl)
+		database.connect()
 		database.remove('settings').multiple(True).execute()
 		database.remove('user').where('name','is','TestingUser').execute()
 
 	@classmethod
 	def setUp(self):
 		database = Database(databaseUrl)
+		database.connect()
 
 	@classmethod
 	def tearDown(self):
