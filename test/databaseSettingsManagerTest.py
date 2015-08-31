@@ -77,38 +77,36 @@ class databaseSettingsManagerTest(unittest.TestCase):
 		self.assertEqual(self.databaseSettings.NumberPublished, 1)
 
 	def test_shouldLoadSpecificSettings(self):
-		self.databaseSettings = DatabaseSettingsManager(self.database, 'PublishManager', 'TestingUser')
+		self.databaseSettings = DatabaseSettingsManager(self.database, 'PublishManager', self.userId)
 		self.assertEqual(self.databaseSettings.initialFile, 'someFile.txt')
 		self.assertEqual(self.databaseSettings.NumberPublished, 2)
 		self.assertEqual(self.databaseSettings.Directory, 'SomeOtherDirectory')
 		self.assertEqual(self.databaseSettings.visible_fields, ['color', 'fileSize', 'stuff'])
 
 	def test_shouldGetSetting(self):
-		self.databaseSettings = DatabaseSettingsManager(self.database, 'PublishManager' 'TestingUser')
+		self.databaseSettings = DatabaseSettingsManager(self.database, 'PublishManager', self.userId)
 		self.assertEqual(self.databaseSettings.visible_fields[1], 'fileSize')
 
-	# def test_shouldSetSetting(self):
-	# 	self.databaseSettings.load('PublishManager')
-	# 	self.databaseSettings.setSetting('errorLog', 'c:/fileOfStupidity.txt')
-	# 	self.assertEqual(self.databaseSettings.getSetting('errorLog'), 'c:/fileOfStupidity.txt')
+	def test_shouldSetSetting(self):
+		self.databaseSettings = DatabaseSettingsManager(self.database, 'PublishManager')
+		self.databaseSettings.set('errorLog', 'c:/fileOfStupidity.txt')
+		self.assertEqual(self.databaseSettings.errorLog, 'c:/fileOfStupidity.txt')
 
 
-	# def test_shouldSaveSettings(self):
-	# 	self.databaseSettings.load('PublishManager', 'TestingUser')
-	# 	self.databaseSettings.setSetting('background', 'green')
-	# 	self.databaseSettings.saveSettings()
-	# 	self.database = Database(databaseUrl)
-	# 	newSettings = SettingsManager('database', database)
-	# 	newSettings.load('PublishManager', 'TestingUser')
-	# 	self.assertEqual(newSettings.getSetting('background'), 'green')
-	# 	newSettings.load('PublishManager')
-	# 	self.assertTrue('background' not in newSettings.getSettings())
+	def test_shouldSaveSettings(self):
+		self.databaseSettings = DatabaseSettingsManager(self.database, 'PublishManager', self.userId)
+		self.databaseSettings.set('background', 'green')
+		self.databaseSettings.save()
+		self.database = Database(databaseUrl)
+		newSettings = DatabaseSettingsManager(self.database, 'PublishManager', self.userId)
+		self.assertEqual(newSettings.background, 'green')
 
-	# def test_shouldCreateSettings(self):
-	# 	self.databaseSettings.create('randomThing')
-	# 	self.databaseSettings.setSetting('stuffy', 'blahblah')
-	# 	self.databaseSettings.saveSettings()
-	# 	self.databaseSettings.create('randomThing', 'TestingUser')
+	def test_shouldCreateSettings(self):
+		self.databaseSettings = DatabaseSettingsManager(self.database, 'RandomApp', self.userId)
+		self.databaseSettings.set('stuffy', 'blahblah')
+		self.databaseSettings.save()
+		otherSettings = DatabaseSettingsManager(self.database, 'RandomApp', self.userId)
+		self.assertEqual(otherSettings.stuffy, 'blahblah')
 
 
 if __name__ == '__main__':
