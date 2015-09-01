@@ -19,10 +19,11 @@ class databaseSettingsManagerTest(unittest.TestCase):
 	def setUpClass(self):
 		#Note: different port number is because database is being run from caretaker
 		# which is where the entitydef for settings lives
-		database = Database(databaseUrl)
-		database.create('user', {'name': 'TestingUser'}).execute()
-		userId = database.find('user').where('name','is','TestingUser').execute().json()[0]['_id']
-		database.create('settings', {
+		self.database = Database(databaseUrl)
+		self.database.connect()
+		self.database.create('user', {'name': 'TestingUser'}).execute()
+		self.userId = self.database.find('user').where('name','is','TestingUser').execute()[0]['_id']
+		self.database.create('settings', {
 			'key': 'PublishManager',
 			'settings': json.dumps(
 						{
@@ -31,9 +32,9 @@ class databaseSettingsManagerTest(unittest.TestCase):
 							'Directory': 'someDirectory/'
 						})
 			}).execute()
-		database.create('settings', {
+		self.database.create('settings', {
 			'key': 'PublishManager',
-			'user':  userId,
+			'user':  self.userId,
 			'settings':	json.dumps(
 						{
 							'visible_fields': ['color', 'fileSize', 'stuff'],
@@ -41,7 +42,7 @@ class databaseSettingsManagerTest(unittest.TestCase):
 							'Directory': 'SomeOtherDirectory'
 						})
 			}).execute()
-		database.create('settings', {
+		self.database.create('settings', {
 			'key': 'DifferentApp',
 			'settings': json.dumps(
 				{
@@ -53,13 +54,15 @@ class databaseSettingsManagerTest(unittest.TestCase):
 
 	@classmethod
 	def tearDownClass(self):
-		database = Database(databaseUrl)
-		database.remove('settings').multiple(True).execute()
-		database.remove('user').where('name','is','TestingUser').execute()
+		self.database = Database(databaseUrl)
+		self.database.connect()
+		self.database.remove('settings').multiple(True).execute()
+		self.database.remove('user').where('name','is','TestingUser').execute()
 
 	@classmethod
 	def setUp(self):
-		database = Database(databaseUrl)
+		self.database = Database(databaseUrl)
+		self.database.connect()
 
 	@classmethod
 	def tearDown(self):
@@ -69,43 +72,41 @@ class databaseSettingsManagerTest(unittest.TestCase):
 		pass
 
 	def test_shouldLoadDefaultSettings(self):
-		self.databaseSettings = DatabaseSettingsManager('PublishManager')
+		self.databaseSettings = DatabaseSettingsManager(self.database, 'PublishManager')
 		self.assertEqual(self.databaseSettings.initialFile, 'someFile.txt')
 		self.assertEqual(self.databaseSettings.NumberPublished, 1)
 
 	def test_shouldLoadSpecificSettings(self):
-		self.databaseSettings = DatabaseSettingsManager('PublishManager', 'TestingUser')
+		self.databaseSettings = DatabaseSettingsManager(self.database, 'PublishManager', self.userId)
 		self.assertEqual(self.databaseSettings.initialFile, 'someFile.txt')
 		self.assertEqual(self.databaseSettings.NumberPublished, 2)
 		self.assertEqual(self.databaseSettings.Directory, 'SomeOtherDirectory')
 		self.assertEqual(self.databaseSettings.visible_fields, ['color', 'fileSize', 'stuff'])
 
 	def test_shouldGetSetting(self):
-		self.databaseSettings = DatabaseSettingsManager('PublishManager' 'TestingUser')
+		self.databaseSettings = DatabaseSettingsManager(self.database, 'PublishManager', self.userId)
 		self.assertEqual(self.databaseSettings.visible_fields[1], 'fileSize')
 
-	# def test_shouldSetSetting(self):
-	# 	self.databaseSettings.load('PublishManager')
-	# 	self.databaseSettings.setSetting('errorLog', 'c:/fileOfStupidity.txt')
-	# 	self.assertEqual(self.databaseSettings.getSetting('errorLog'), 'c:/fileOfStupidity.txt')
+	def test_shouldSetSetting(self):
+		self.databaseSettings = DatabaseSettingsManager(self.database, 'PublishManager')
+		self.databaseSettings.set('errorLog', 'c:/fileOfStupidity.txt')
+		self.assertEqual(self.databaseSettings.errorLog, 'c:/fileOfStupidity.txt')
 
 
-	# def test_shouldSaveSettings(self):
-	# 	self.databaseSettings.load('PublishManager', 'TestingUser')
-	# 	self.databaseSettings.setSetting('background', 'green')
-	# 	self.databaseSettings.saveSettings()
-	# 	database = Database(databaseUrl)
-	# 	newSettings = SettingsManager('database', database)
-	# 	newSettings.load('PublishManager', 'TestingUser')
-	# 	self.assertEqual(newSettings.getSetting('background'), 'green')
-	# 	newSettings.load('PublishManager')
-	# 	self.assertTrue('background' not in newSettings.getSettings())
+	def test_shouldSaveSettings(self):
+		self.databaseSettings = DatabaseSettingsManager(self.database, 'PublishManager', self.userId)
+		self.databaseSettings.set('background', 'green')
+		self.databaseSettings.save()
+		self.database = Database(databaseUrl)
+		newSettings = DatabaseSettingsManager(self.database, 'PublishManager', self.userId)
+		self.assertEqual(newSettings.background, 'green')
 
-	# def test_shouldCreateSettings(self):
-	# 	self.databaseSettings.create('randomThing')
-	# 	self.databaseSettings.setSetting('stuffy', 'blahblah')
-	# 	self.databaseSettings.saveSettings()
-	# 	self.databaseSettings.create('randomThing', 'TestingUser')
+	def test_shouldCreateSettings(self):
+		self.databaseSettings = DatabaseSettingsManager(self.database, 'RandomApp', self.userId)
+		self.databaseSettings.set('stuffy', 'blahblah')
+		self.databaseSettings.save()
+		otherSettings = DatabaseSettingsManager(self.database, 'RandomApp', self.userId)
+		self.assertEqual(otherSettings.stuffy, 'blahblah')
 
 
 if __name__ == '__main__':
