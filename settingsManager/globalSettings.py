@@ -75,7 +75,6 @@ class globalSettings(SettingsManager):
 		self.settings['programs'].sort()
 
 		# Do some extra legwork for Nuke as it changes all the time
-		self.settings['NUKE_EXE'] = '{programsRoot}{nuke_version}/'+self.settings['nuke_version'].split('.')[0]+'.0.exe'
 		self.settings['nukePath'] = os.environ.get('NUKE_PATH')
 		if self.settings['nukePath']:
 			self.settings['NETWORK_TOOLSETS'] = '{nukePath}/ToolSets'
