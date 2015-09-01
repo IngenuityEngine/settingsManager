@@ -1,96 +1,68 @@
 import json
-import sys
 
-sys.path.append('c:\dev\coren\python')
-from settingsInterface import SettingsInterface
+from SettingsManager import SettingsManager
 
 
-class DatabaseSettingsManager(SettingsInterface):
+class DatabaseSettingsManager(SettingsManager):
 
-	def __init__(self, coren):
-		self.coren = coren
-		self.user = ""
-		self.key =""
+	def __init__(self, database, token, user=None):
+		self._database = database
+		self._user = user
+		self._token = token
+		self._settings = {}
 
-	def create(self, key, user=None):
-		if self.user or self.key:
-			self.saveSettings()
-		self.key = key
-		self.user = user
-		self.currentSettings = {}
-		if self.user:
-			print(self.coren.find('_user').execute())
-			userId = self.coren.find('_user').where('name','is', self.user).execute().json()[0]['_id']
-			createQuery = self.coren.create('settings', {'key': key, 'user': userId, 'settings': json.dumps({})})
+		basicSettings = self._database\
+					.find('settings')\
+					.where('key', 'is', token)\
+					.where('user','notexists')\
+					.execute()
+
+		if basicSettings:
+			for setting in basicSettings:
+				self._settings.update(setting.settings)
+
+		if (self._user):
+			extraSettings = self._database\
+								.find('settings')\
+								.where('key', 'is', self._token)\
+								.where('user', 'is', self._user)\
+								.execute()
+			if extraSettings:
+				for setting in extraSettings:
+					self._settings.update(setting.settings)
+
+		for setting in self._settings:
+			setattr(self, setting, self._get(setting))
+
+		self.set = self._set
+
+		self.save = self._save
+
+	def _set(self, key, value=None):
+		if value == None:
+			self._settings.update(key)
+			for setting in key:
+				setattr(self, key, self._get(key))
 		else:
-			createQuery = self.coren.create('settings', {'key': key, 'settings': json.dumps({})})
-		createQuery.execute()
+			self._settings[key] = value
+			setattr(self, key, self._get(value))
 
-		return self
-
-
-	def load(self, key, user=""):
-		#Key stores the key of what settings we are now looking at
-
-		if self.user or self.key:
-			self.saveSettings()
-		#User if there is a particular user is a name
-		self.key = key
-		self.user = user
-		#A local cache of what the settings are currently
-		self.currentSettings = self.getSettingsForQuery()
-		if user:
-			self.currentSettings.update(self.getSettingsForQuery(user))
-
-		return self
-
-	def save(self, toSave):
-		defaultSettings = self.getSettingsForQuery()
-		changedSettings = {}
-		for key in self.currentSettings:
-			if key not in defaultSettings or (key in defaultSettings and \
-					self.currentSettings[key] != defaultSettings):
-				changedSettings[key] = self.currentSettings[key]
-
-		query = self.coren.update('settings', {'settings': json.dumps(changedSettings)})\
-					.where('key', 'is', self.key)
-		if self.user:
-			userId = self.coren.find('_user')\
-								.where('name','is', self.user)\
-								.execute()\
-								.json()[0]['_id']
-			query = query.where('user','is',userId)
+	def _save(self):
+		allSettings = json.dumps(self._settings)
+		query = self._database\
+			.update('settings')\
+			.where('key', 'is', self._token)\
+			.set('settings', allSettings)
+		if self._user:
+			query = query.where('user', 'is', self._user)
 		else:
 			query = query.where('user', 'notexists')
+
 		query.execute()
 
 
-	def set(self, key, value=None):
-		if value:
-			self.currentSettings[key] = value
-		else:
-			self.currentSettings.update(key)
 
 
-	def getSettingsForQuery(self, queryKey = ""):
-		try:
-			if queryKey:
-				userId = self.coren.find('_user').where('name','is',queryKey).execute().json()[0]['_id']
-				resp = self.coren.find('settings').where('key','is',self.key).where('user','is',userId).execute().json()
-			else:
-				resp = self.coren.find('settings').where('key', 'is', self.key).where('user', 'notexists').execute().json()
 
-			responseSettings = json.loads(resp[0]['settings'])
-			return responseSettings
-		except:
-			print ('Nothing was found for the query of %s with user potentially %s' % (self.key, queryKey))
-			return {}
 
-	def get(self, key=None):
-		if key is None:
-			return self.currentSettings
-		try:
-			return self.currentSettings[key]
-		except:
-			raise KeyError('This setting for ' + key + ' has not been defined yet!')
 

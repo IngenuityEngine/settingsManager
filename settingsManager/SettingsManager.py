@@ -104,6 +104,3 @@ class SettingsManager(Settings):
 				for i in key:
 					setattr(self, i, self.get(i))
 			json.dump(extraSettings, f, indent=4, sort_keys=True)
-
-
-

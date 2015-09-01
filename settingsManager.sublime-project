@@ -1,2 +1,25 @@
 {
+	"folders":
+	[
+		{
+			"path": "./",
+
+			"folder_exclude_patterns": [
+					"node_modules",
+					"docs",
+					"public",
+					"build/",
+					"plugins/coren_setup/templates",
+					"shared/compiled",
+					"client/compiled"
+				],
+			"file_exclude_patterns": [
+				"*.sublime-project",
+				"*.sublime-workspace",
+				"npm-debug*",
+				".*",
+				"glyphicons*"
+			]
+		}
+	]
 }

@@ -1,2 +1,3 @@
 from SettingsManager import SettingsManager
 from globalSettings import globalSettings
+from databaseSettingsManager import DatabaseSettingsManager
