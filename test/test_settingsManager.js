@@ -2,10 +2,10 @@
 /////////////////////////
 // var _ = require('lodash')
 var async = require('async')
+var debug = require('debug')('settingsManager:test')
 var it = global.it
 var describe = global.describe
 var expect = require('expect.js')
-
 
 
 //Our Modules
@@ -21,6 +21,11 @@ var SettingsManager = require('../settingsManager/settingsManager')
 
 describe('test/test_settingsManager', function()
 {
+
+// bail after the first error
+this.bail(true)
+// 5 second timeout
+this.timeout(10000)
 
 before(function(done)
 {
@@ -42,7 +47,7 @@ before(function(done)
 		self.database
 			.create('settings',
 					{
-						'key': 'testApp',
+						'key': 'testKey',
 						'settings': JSON.stringify(
 						{
 							profile: 'randomUser',
@@ -52,10 +57,23 @@ before(function(done)
 					null,
 					callback)
 	}
-	function createUser(callback)
+	function findOrCreateUser(callback)
 	{
 		self.database
-			.create('user',
+			.find('user')
+			.where('name','is','settingsTestUser')
+			.execute(function(err, resp)
+			{
+				if (err)
+					return callback(err)
+				if (resp.length)
+				{
+					self.userID = resp[0]._id
+					callback()
+				}
+				else
+				{
+					self.database.create('user',
 					{
 						'name': 'settingsTestUser',
 						'username': 'settingsTestUser',
@@ -63,9 +81,13 @@ before(function(done)
 						'email': 'settings@user.com'
 					}, null, function(err, resp)
 					{
+						debug('err:', err)
+						debug('resp:', resp)
 						self.userID = resp[0]._id
 						callback()
 					})
+				}
+			})
 	}
 	function createUserSettings(callback)
 	{
@@ -73,7 +95,7 @@ before(function(done)
 			.create('settings',
 			{
 				'user': self.userID,
-				'key': 'testApp',
+				'key': 'testKey',
 				'settings': JSON.stringify(
 				{
 					profile: 'otherUser',
@@ -88,7 +110,7 @@ before(function(done)
 	async.series([
 		createDatabase,
 		createBasicSettings,
-		createUser,
+		findOrCreateUser,
 		createUserSettings
 		], done)
 })
@@ -101,7 +123,7 @@ after(function(done)
 	{
 		var query = self.database
 			.remove('settings')
-			.where('key', 'is', 'testApp')
+			.where('key', 'is', 'testKey')
 			.multiple(true)
 			query.execute(callback)
 	}
@@ -122,7 +144,7 @@ after(function(done)
 
 it('should initialize a settingsManager', function(done)
 {
-	var settingsManager = new SettingsManager(this.database, 'testApp', function()
+	var settingsManager = new SettingsManager(this.database, 'testKey', function()
 	{
 		expect(settingsManager).to.not.equal(undefined)
 		done()
@@ -131,7 +153,7 @@ it('should initialize a settingsManager', function(done)
 
 it('should load in the default settings for a generic app', function(done)
 {
-	var settingsManager = new SettingsManager(this.database, 'testApp', function()
+	var settingsManager = new SettingsManager(this.database, 'testKey', function()
 	{
 		expect(settingsManager.profile).to.equal('randomUser')
 		expect(settingsManager.otherThing).to.equal('someOtherSetting')
@@ -141,7 +163,7 @@ it('should load in the default settings for a generic app', function(done)
 
 it('should load in the default settings for a user app', function(done)
 {
-	var settingsManager = new SettingsManager(this.database, 'testApp', 'settingsTestUser', function()
+	var settingsManager = new SettingsManager(this.database, 'testKey', 'settingsTestUser', function()
 	{
 		expect(settingsManager.profile).to.equal('otherUser')
 		expect(settingsManager.otherThing).to.equal('someOtherSetting')
@@ -152,7 +174,7 @@ it('should load in the default settings for a user app', function(done)
 
 it('should load in the default settings for a user app', function(done)
 {
-	var settingsManager = new SettingsManager(this.database, 'testApp', this.userID, function()
+	var settingsManager = new SettingsManager(this.database, 'testKey', this.userID, function()
 	{
 		expect(settingsManager.profile).to.equal('otherUser')
 		expect(settingsManager.otherThing).to.equal('someOtherSetting')
@@ -164,7 +186,7 @@ it('should load in the default settings for a user app', function(done)
 it('should load save settings for a user app', function(done)
 {
 	var self = this
-	var settingsManager = new SettingsManager(this.database, 'testApp', this.userID, function()
+	var settingsManager = new SettingsManager(this.database, 'testKey', this.userID, function()
 	{
 		expect(settingsManager.profile).to.equal('otherUser')
 		expect(settingsManager.otherThing).to.equal('someOtherSetting')
@@ -176,7 +198,7 @@ it('should load save settings for a user app', function(done)
 
 		settingsManager.save(function()
 		{
-			var updatedSettings = new SettingsManager(self.database, 'testApp', self.userID, function()
+			var updatedSettings = new SettingsManager(self.database, 'testKey', self.userID, function()
 			{
 				expect(updatedSettings.profile).to.equal('otherUser')
 				expect(updatedSettings.otherThing).to.equal('aModifiedSetting')
