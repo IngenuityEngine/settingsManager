@@ -1,13 +1,18 @@
+// Vendor Modules
+/////////////////////////
 var _ = require('lodash')
 var Class = require('uberclass')
+
+// Our Modules
+///////////////////////
 var arkUtil = require('arkutil')
 
 module.exports = Class.extend({
 
-init: function(searchpaths, modes)
+init: function(searchPaths, modes)
 {
 	_.bindAll(this)
-	searchpaths = arkUtil.ensureArray(searchpaths)
+	searchPaths = arkUtil.ensureArray(searchPaths)
 	modes = arkUtil.ensureArray(modes)
 	this.settings = {}
 
@@ -15,17 +20,17 @@ init: function(searchpaths, modes)
 
 	_.each(modes, function(mode)
 	{
-		_.each(searchpaths, function(searchpath)
+		_.each(searchPaths, function(searchpath)
 		{
 			try
 			{
-				var settings = require(searchpath+'/'+ mode)
+				var settings = require(searchpath + '/' + mode)
 				_.merge(self, settings)
 				_.merge(self.settings, settings)
 			}
 			catch (err)
 			{
-				//The filepath does not exist; no problem
+				// The filepath does not exist, no problem
 			}
 		})
 	})

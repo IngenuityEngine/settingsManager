@@ -8,7 +8,7 @@ var describe = global.describe
 var expect = require('expect.js')
 
 
-//Our Modules
+// Our Modules
 ///////////////////////
 // var helpers = require('arkutil')
 var config = require('../config/test')
