@@ -16,7 +16,7 @@ class globalSettingsTest(unittest.TestCase):
 
 	def test_shouldRetrieveLiteralString(self):
 		arkGlobals = globalSettings()
-		self.assertEqual(arkGlobals.IETEMP, 'C:/ie/temp/')
+		self.assertEqual(arkGlobals.TEMP, 'C:/ie/temp/')
 
 	def test_shouldRetrieveLiteralList(self):
 		arkGlobals = globalSettings()
