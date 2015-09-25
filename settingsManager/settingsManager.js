@@ -102,4 +102,6 @@ save: function(callback)
 	query.execute(callback)
 
 }
+
+// end of module
 })

@@ -13,5 +13,6 @@ settingsManager: function(database, token, user)
 {
 	return new settingsManager(database, token, user)
 }
+
 //end of module
 }
