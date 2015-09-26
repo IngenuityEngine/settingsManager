@@ -8,7 +8,7 @@ from database import Database
 
 from settingsManager import DatabaseSettingsManager
 
-databaseUrl = 'http://localhost:2160/api/'
+databaseUrl = 'http://127.0.0.1:2020/api/'
 
 
 
@@ -19,7 +19,7 @@ class databaseSettingsManagerTest(unittest.TestCase):
 	def setUpClass(self):
 		#Note: different port number is because database is being run from caretaker
 		# which is where the entitydef for settings lives
-		self.database = Database(databaseUrl)
+		self.database = Database(databaseUrl, keepTrying=True)
 		self.database.connect()
 		self.database.create('user', {'name': 'TestingUser'}).execute()
 		self.userId = self.database.find('user').where('name','is','TestingUser').execute()[0]['_id']
