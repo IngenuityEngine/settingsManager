@@ -1,0 +1,3 @@
+from settingsManager import SettingsManager
+from settingsManager import globalSettings
+from settingsManager.Settings import Settings
