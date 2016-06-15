@@ -27,12 +27,15 @@ class Settings(object):
 			return not inspect.ismethod(func)
 
 		methods = inspect.getmembers(self, predicate=propertiesOnly)
-		methods = [method[0] for method in methods if method[0][0] != '_']
-		data = {}
-		for method in methods:
-			data[method] = getattr(self, method)
-		return data
+		# ignore properties that start with underscores
+		# they're likely magic properties or 'private'
+		methods = [method[0] for method in methods
+			if method[0][0] != '_']
 
+		settings = {}
+		for method in methods:
+			settings[method] = getattr(self, method)
+		return settings
 
 
 def main():
