@@ -1,0 +1,7 @@
+{
+	"firstTest": "testModeOne",
+	"listTest": "variable overwrite",
+	"dictTest": {
+		"more": "variables"
+	}
+}

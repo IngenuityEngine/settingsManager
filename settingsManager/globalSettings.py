@@ -5,6 +5,7 @@ from SettingsManager import SettingsManager
 import arkInit
 arkInit.init()
 import arkUtil
+import cOS
 
 
 class globalSettings(SettingsManager):

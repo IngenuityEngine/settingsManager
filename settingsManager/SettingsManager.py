@@ -7,7 +7,7 @@ import os
 
 class SettingsManager(Settings):
 
-	def __init__(self, appName=None, user=None):
+	def __init__(self, appName='default', user=None):
 		self.appName = appName
 		self.user = user
 		self.settings = {}

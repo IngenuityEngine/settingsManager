@@ -1,5 +1,11 @@
 {
 	"firstTest": "testOne",
-	"listTest": ["apples", "pears"],
-	"dictTest": {"other": "test"}
+	"listTest": [
+			"apples",
+			"pears"
+		],
+	"dictTest": {
+		"other": "test"
+	},
+	"subTest": "{firstTest}/testTwo"
 }
