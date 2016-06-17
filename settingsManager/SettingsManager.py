@@ -11,7 +11,7 @@ class SettingsManager(Settings):
 		self.appName = appName
 		self.user = user
 		self.settings = {}
-		self.rootDir = os.environ.get('ARK_CONFIG', 'c:/ie/config')
+		self.rootDir = os.environ.get('ARK_CONFIG')
 		self.pathname = self.rootDir + '/' + appName + '.json'
 		self.load()
 		self.setup()

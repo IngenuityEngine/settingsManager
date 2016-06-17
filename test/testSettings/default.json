@@ -7,5 +7,6 @@
 	"dictTest": {
 		"other": "test"
 	},
-	"subTest": "{firstTest}/testTwo"
+	"subTest": "{firstTest}/testTwo",
+	"urlTest": "http://192.168.0.75/api"
 }

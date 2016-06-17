@@ -67,6 +67,12 @@ class test(tryout.TestSuite):
 				"more": "variables"
 			})
 
+	def handle_urls(self):
+		settings = SettingsManager()
+		self.assertEqual(
+			settings.urlTest,
+			'http://192.168.0.75/api')
+
 	# def shouldBeAbleToOverrideSettingsWithUser(self):
 	# 	settings = SettingsManager('testMode',
 	# 		'testuser')

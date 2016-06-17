@@ -29,7 +29,8 @@ class globalSettings(SettingsManager):
 			pass
 
 	def setSharedRoot(self):
-		if 'ARK_SHARED_ROOT' in self.settings:
+		if 'ARK_SHARED_ROOT' in self.settings and \
+			self.settings['ARK_SHARED_ROOT'] is not None:
 			# do nothing since it's already set
 			pass
 		elif 'ARK_SHARED_ROOT' in os.environ:
@@ -51,7 +52,7 @@ class globalSettings(SettingsManager):
 	def setComputerInfo(self):
 		# cross platform user root
 		self.settings['USERROOT'] = \
-			cOS.unixPath(os.path.expandUser('~'))
+			cOS.unixPath(os.path.expanduser('~'))
 		self.settings['LOCAL_USERNAME'] = \
 			os.environ.get('USERNAME')
 		self.settings['COMPUTER_NAME'] = \
@@ -66,7 +67,8 @@ class globalSettings(SettingsManager):
 		else:
 			self.settings['COMPUTER_TYPE'] = 'workstation'
 
-		self.settings['IS_NODE'] = COMPUTER_TYPE in self.nodeTypes
+		self.settings['IS_NODE'] = \
+			self.settings['COMPUTER_TYPE'] in self.nodeTypes
 		self.settings['COMPUTER_LOCATION'] = \
 			os.environ.get('COMPUTER_LOCATION', 'local')
 
