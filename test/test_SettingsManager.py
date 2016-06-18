@@ -4,7 +4,9 @@ import os
 # Ark modules
 import arkInit
 arkInit.init()
-from settingsManager import SettingsManager
+import settingsManager
+print 'wtf'
+print dir(settingsManager)
 import tryout
 import cOS
 
@@ -25,12 +27,12 @@ class test(tryout.TestSuite):
 			os.environ['ARK_MODE'] = self.ogMode
 
 	def retrieveLiteralString(self):
-		settings = SettingsManager()
+		settings = settingsManager.getSettings()
 		self.assertEqual(
 			settings.firstTest, 'testOne')
 
 	def retrieveLiteralList(self):
-		settings = SettingsManager()
+		settings = settingsManager.getSettings()
 		self.assertEqual(
 			settings.listTest,
 			[
@@ -39,25 +41,25 @@ class test(tryout.TestSuite):
 			])
 
 	def retrieveLiteralDict(self):
-		settings = SettingsManager()
+		settings = settingsManager.getSettings()
 		self.assertEqual(
 			settings.dictTest,
 			{'other': 'test'})
 
 	def retrieveSubstitutedString(self):
-		settings = SettingsManager()
+		settings = settingsManager.getSettings()
 		self.assertEqual(
 			settings.subTest,
 			'testOne/testTwo')
 
 	def dotAndGetNotation(self):
-		settings = SettingsManager()
+		settings = settingsManager.getSettings()
 		self.assertEqual(
 			settings.firstTest,
 			settings.get('firstTest'))
 
 	def loadAppSettings(self):
-		settings = SettingsManager('sweetApp')
+		settings = settingsManager.getSettings('sweetApp')
 		self.assertEqual(
 			settings.firstTest,
 			'testModeOne')
@@ -71,13 +73,13 @@ class test(tryout.TestSuite):
 			})
 
 	def handle_urls(self):
-		settings = SettingsManager()
+		settings = settingsManager.getSettings()
 		self.assertEqual(
 			settings.urlTest,
 			'http://192.168.0.75/api')
 
 	def overrideSettingsWithUser(self):
-		settings = SettingsManager('sweetApp',
+		settings = settingsManager.getSettings('sweetApp',
 			'blented')
 		self.assertEqual(
 			settings.firstTest,
@@ -94,21 +96,21 @@ class test(tryout.TestSuite):
 			})
 
 	def setASettingAndSaveForANewUser(self):
-		settings = SettingsManager('sweetApp',
+		settings = settingsManager.getSettings('sweetApp',
 			'newUser')
 		settings.set('autoRun', False)
 
-		settings = SettingsManager('sweetApp',
+		settings = settingsManager.getSettings('sweetApp',
 			'newUser')
 		self.assertEqual(settings.autoRun, False)
 		self.assertTrue(os.path.isfile(settings.filename))
 
 	def setASettingAndSaveForExistingUser(self):
-		settings = SettingsManager('sweetApp',
+		settings = settingsManager.getSettings('sweetApp',
 			'blented')
 		settings.set('awesome', True)
 
-		settings = SettingsManager('sweetApp',
+		settings = settingsManager.getSettings('sweetApp',
 			'blented')
 		self.assertEqual(settings.awesome, True)
 		self.assertTrue(os.path.isfile(settings.filename))

@@ -1,4 +1,1 @@
-from settingsManager import SettingsManager
-from settingsManager import globalSettings
-from settingsManager.databaseSettingsManager import DatabaseSettingsManager
-from settingsManager.Settings import Settings
+from settingsManager import *
