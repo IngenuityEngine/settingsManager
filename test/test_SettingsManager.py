@@ -24,12 +24,12 @@ class test(tryout.TestSuite):
 		if self.ogMode:
 			os.environ['ARK_MODE'] = self.ogMode
 
-	def shouldRetrieveLiteralString(self):
+	def retrieveLiteralString(self):
 		settings = SettingsManager()
 		self.assertEqual(
 			settings.firstTest, 'testOne')
 
-	def shouldRetrieveLiteralList(self):
+	def retrieveLiteralList(self):
 		settings = SettingsManager()
 		self.assertEqual(
 			settings.listTest,
@@ -38,26 +38,26 @@ class test(tryout.TestSuite):
 				'pears'
 			])
 
-	def shouldRetrieveLiteralDict(self):
+	def retrieveLiteralDict(self):
 		settings = SettingsManager()
 		self.assertEqual(
 			settings.dictTest,
 			{'other': 'test'})
 
-	def shouldRetrieveSubstitutedString(self):
+	def retrieveSubstitutedString(self):
 		settings = SettingsManager()
 		self.assertEqual(
 			settings.subTest,
 			'testOne/testTwo')
 
-	def shouldAcceptDotAndGetNotation(self):
+	def dotAndGetNotation(self):
 		settings = SettingsManager()
 		self.assertEqual(
 			settings.firstTest,
 			settings.get('firstTest'))
 
-	def shouldBeAbleToOverrideSettings(self):
-		settings = SettingsManager('testMode')
+	def loadAppSettings(self):
+		settings = SettingsManager('sweetApp')
 		self.assertEqual(
 			settings.firstTest,
 			'testModeOne')
@@ -67,8 +67,6 @@ class test(tryout.TestSuite):
 		self.assertEqual(
 			settings.dictTest,
 			{
-				# fix: merge if we need it later
-				# "other": "test",
 				"more": "variables"
 			})
 
@@ -78,12 +76,22 @@ class test(tryout.TestSuite):
 			settings.urlTest,
 			'http://192.168.0.75/api')
 
-	# def shouldBeAbleToOverrideSettingsWithUser(self):
-	# 	settings = SettingsManager('testMode',
-	# 		'testuser')
-	# 	self.assertEqual(
-	# 		settings.NETWORK_TOOLSETS,
-	# 		'networktools')
+	def overrideSettingsWithUser(self):
+		settings = SettingsManager('sweetApp',
+			'blented')
+		self.assertEqual(
+			settings.firstTest,
+			'blented is awesome')
+		self.assertEqual(
+			settings.listTest,
+			'variable overwrite')
+		self.assertEqual(
+			settings.dictTest,
+			{
+				"more": "variables",
+				"such": "dict",
+				"so": "overwrite"
+			})
 
 
 if __name__ == '__main__':
