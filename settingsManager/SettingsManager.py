@@ -109,9 +109,15 @@ class SettingsManager(Settings):
 
 	def set(self, key, value=None):
 		with open(self.filename, 'w+') as f:
-			extraSettings = arkUtil.parseJson(f)
+			# can error if the settings file doesn't
+			# exist yet
+			try:
+				existingSettings = arkUtil.parseJSON(f)
+			except:
+				existingSettings = {}
+
 			# if we have key value, make a new dict
-			if value:
+			if value is not None:
 				newSettings = {key: value}
 			# otherwise hopefully we passed a dict
 			elif type(key) == dict:
@@ -121,6 +127,9 @@ class SettingsManager(Settings):
 					' Invalid data')
 
 			self.updateSettings(newSettings)
-			extraSettings = arkUtil.mergeDict(
-				extraSettings, newSettings)
-			json.dump(extraSettings, f, indent=4, sort_keys=True)
+			existingSettings = arkUtil.mergeDict(
+				existingSettings, newSettings)
+			json.dump(existingSettings,
+				f,
+				indent=4,
+				sort_keys=True)
