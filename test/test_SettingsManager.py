@@ -13,11 +13,16 @@ class test(tryout.TestSuite):
 
 	def setUp(self):
 		self.ogConfig = os.environ.get('ARK_CONFIG')
+		self.ogMode = os.environ.get('ARK_MODE')
 		configPath = cOS.getDirName(__file__) + 'testSettings'
 		os.environ['ARK_CONFIG'] = configPath
+		os.environ['ARK_MODE'] = 'default'
 
 	def tearDown(self):
-		os.environ['ARK_CONFIG'] = self.ogConfig
+		if self.ogConfig:
+			os.environ['ARK_CONFIG'] = self.ogConfig
+		if self.ogMode:
+			os.environ['ARK_MODE'] = self.ogMode
 
 	def shouldRetrieveLiteralString(self):
 		settings = SettingsManager()

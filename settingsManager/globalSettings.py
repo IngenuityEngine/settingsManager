@@ -1,6 +1,6 @@
 import os
 # import sys
-from types import *
+
 from SettingsManager import SettingsManager
 import arkInit
 arkInit.init()
@@ -12,19 +12,20 @@ class globalSettings(SettingsManager):
 
 	nodeTypes = ['render']
 
-	def __init__(self, overrides=None):
+	def __init__(self):
 		super(globalSettings, self).__init__('default')
 
-	# overrides gets overriden as global settings does
+	# overrideSettings gets overriden as global settings does
 	# not follow the <app>.<user>.json naming conventino
-	def overrides(self):
+	def overrideSettings(self):
 		arkMode = os.environ.get('ARK_MODE', None)
 		if not arkMode:
 			return
 		try:
-			with open(self.rootDir + '/' + arkMode + '.json') as f:
+			settingsFile = self.rootDir + '/' + arkMode + '.json'
+			with open(settingsFile) as f:
 				extraSettings = arkUtil.parseJSON(f)
-				self.settings.update(extraSettings)
+				self.updateSettings(extraSettings)
 		except:
 			pass
 
@@ -46,8 +47,8 @@ class globalSettings(SettingsManager):
 			self.settings['ARK_SHARED_ROOT'] = \
 				'/mnt/ramburglar/'
 
-		print 'ARK_SHARED_ROOT:', \
-			self.settings['ARK_SHARED_ROOT']
+		# print 'ARK_SHARED_ROOT:', \
+		# 	self.settings['ARK_SHARED_ROOT']
 
 	def setComputerInfo(self):
 		# cross platform user root
