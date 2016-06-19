@@ -11,7 +11,7 @@ module.exports = Class.extend({
 
 init: function(searchPaths, modes)
 {
-	_.bindAll(this)
+	_.bindAll(this, _.functionsIn(this))
 	searchPaths = arkUtil.ensureArray(searchPaths)
 	modes = arkUtil.ensureArray(modes)
 	this.settings = {}
