@@ -15,6 +15,24 @@ class globalSettings(SettingsManager):
 	def __init__(self):
 		super(globalSettings, self).__init__('default')
 
+	# runSetupScript handles all constants which need to be
+	def setup(self):
+	# found by lookups in env variable or other means
+		self.set(
+			'ARK_ROOT',
+			os.environ.get('ARK_ROOT'))
+
+		if 'ARK_CURRENT_APP' in os.environ:
+			self.settings['ARK_CURRENT_APP'] = \
+				os.environ['ARK_CURRENT_APP'].lower()
+		else:
+			self.settings['ARK_CURRENT_APP'] = 'standalone'
+
+		self.setSharedRoot()
+		self.setComputerInfo()
+		self.setNetworkInfo()
+		self.setTempFolder()
+
 	# overrideSettings gets overriden as global settings does
 	# not follow the <app>.<user>.json naming conventino
 	def overrideSettings(self):
@@ -78,22 +96,23 @@ class globalSettings(SettingsManager):
 			self.settings['DATABASE'] = '192.168.0.75'
 		self.settings['DATABASE'] += '/api'
 
-	# runSetupScript handles all constants which need to be
-	def setup(self):
-	# found by lookups in env variable or other means
-		self.set(
-			'ARK_ROOT',
-			os.environ.get('ARK_ROOT'))
+	def setTempFolder(self):
+		if 'TEMP' in self.settings and \
+			self.settings['TEMP'] is not None:
+			# do nothing since it's already set
+			pass
+		elif 'ARK_TEMP' in os.environ:
+			self.settings['TEMP'] = \
+				os.environ.get('ARK_TEMP')
+		elif cOS.isWindows():
+			self.settings['TEMP'] = \
+				'c:/temp/'
+		elif cOS.isMac() or cOS.isLinux():
+			self.settings['TEMP'] = \
+				'/var/temp/'
 
-		if 'ARK_CURRENT_APP' in os.environ:
-			self.settings['ARK_CURRENT_APP'] = \
-				os.environ['ARK_CURRENT_APP'].lower()
-		else:
-			self.settings['ARK_CURRENT_APP'] = 'standalone'
-
-		self.setSharedRoot()
-		self.setComputerInfo()
-		self.setNetworkInfo()
+		# ensure the temp directory exists
+		cOS.makeDirs(self.settings['TEMP'])
 
 	def set(self, key, value=None):
 		'''

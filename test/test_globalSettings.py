@@ -103,6 +103,8 @@ class test(tryout.TestSuite):
 			settings.USER_ROOT is not False)
 		self.assertTrue(
 			settings.LOCAL_USERNAME is not False)
+		self.assertTrue(
+			settings.TEMP is not False)
 
 if __name__ == '__main__':
 	tryout.run(test)
