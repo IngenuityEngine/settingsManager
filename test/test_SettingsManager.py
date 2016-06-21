@@ -16,9 +16,6 @@ class test(tryout.TestSuite):
 		self.configPath = cOS.getDirName(__file__) + 'config'
 		cOS.copyTree(sourcePath, self.configPath)
 
-	def tearDownClass(self):
-		cOS.removeDir(self.configPath)
-
 	def setUp(self):
 		self.ogConfig = os.environ.get('ARK_CONFIG')
 		self.ogMode = os.environ.get('ARK_MODE')

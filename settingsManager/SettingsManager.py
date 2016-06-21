@@ -25,8 +25,12 @@ class SettingsManager(Settings):
 		# load it then run setup
 		# (setup currently only does anything
 		# for global settings)
-		self.updateFromFile(self.filename)
+		# setup() is called before the initial load.
+		# the idea is that setup is setting variables
+		# that are then used when loading the
+		# rest of the settings, ex: ARK_ROOT
 		self.setup()
+		self.updateFromFile(self.filename)
 
 		# try to load additional settings based on
 		# user, ark_mode, etc

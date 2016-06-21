@@ -23,7 +23,6 @@ class globalSettings(SettingsManager):
 			return
 		try:
 			settingsFile = self.rootDir + '/' + arkMode + '.json'
-			print 'setfil:', settingsFile
 			self.updateFromFile(settingsFile)
 		except:
 			pass
@@ -51,7 +50,7 @@ class globalSettings(SettingsManager):
 
 	def setComputerInfo(self):
 		# cross platform user root
-		self.settings['USERROOT'] = \
+		self.settings['USER_ROOT'] = \
 			cOS.unixPath(os.path.expanduser('~'))
 		self.settings['LOCAL_USERNAME'] = \
 			os.environ.get('USERNAME')
@@ -77,6 +76,7 @@ class globalSettings(SettingsManager):
 			self.settings['DATABASE'] = '108.60.58.20'
 		else:
 			self.settings['DATABASE'] = '192.168.0.75'
+		self.settings['DATABASE'] += '/api'
 
 	# runSetupScript handles all constants which need to be
 	def setup(self):

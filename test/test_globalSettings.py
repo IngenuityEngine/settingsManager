@@ -10,13 +10,12 @@ import settingsManager
 
 class test(tryout.TestSuite):
 
+	title = 'test/test_globalSettings.py'
+
 	def setUpClass(self):
 		sourcePath = cOS.getDirName(__file__) + 'testSettings'
 		self.configPath = cOS.getDirName(__file__) + 'config'
 		cOS.copyTree(sourcePath, self.configPath)
-
-	def tearDownClass(self):
-		cOS.removeDir(self.configPath)
 
 	def setUp(self):
 		self.ogConfig = os.environ.get('ARK_CONFIG')
@@ -34,7 +33,6 @@ class test(tryout.TestSuite):
 
 	def shouldRetrieveLiteralString(self):
 		settings = settingsManager.globalSettings()
-		print 'settings:', settings.settings
 		self.assertEqual(
 			settings.firstTest, 'testOne')
 
@@ -61,9 +59,6 @@ class test(tryout.TestSuite):
 
 	def shouldAcceptDotAndGetNotation(self):
 		settings = settingsManager.globalSettings()
-		print 'settings:', settings.settings
-		print 'config:', os.environ.get('ARK_CONFIG')
-		print 'mode:', os.environ.get('ARK_MODE')
 		self.assertEqual(
 			settings.firstTest,
 			settings.get('firstTest'))
@@ -91,6 +86,23 @@ class test(tryout.TestSuite):
 			settings.urlTest,
 			'http://192.168.0.75/api')
 
+	def actual_settings(self):
+		os.environ['ARK_CONFIG'] = self.ogConfig
+		os.environ['ARK_MODE'] = 'default'
+		settings = settingsManager.globalSettings()
+
+		self.assertTrue(
+			settings.DATABASE is not False)
+		self.assertTrue(
+			settings.ARK_ROOT is not False)
+		self.assertTrue(
+			settings.COMPUTER_TYPE is not False)
+		self.assertTrue(
+			settings.ARK_SHARED_ROOT is not False)
+		self.assertTrue(
+			settings.USER_ROOT is not False)
+		self.assertTrue(
+			settings.LOCAL_USERNAME is not False)
 
 if __name__ == '__main__':
 	tryout.run(test)
