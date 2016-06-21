@@ -133,6 +133,7 @@ class SettingsManager(Settings):
 			self.updateSettings(newSettings)
 			existingSettings = arkUtil.mergeDict(
 				existingSettings, newSettings)
+
 			json.dump(existingSettings,
 				f,
 				indent=4,

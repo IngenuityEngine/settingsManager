@@ -11,6 +11,14 @@ import cOS
 class test(tryout.TestSuite):
 	title = 'test/test_SettingsManager.py'
 
+	def setUpClass(self):
+		sourcePath = cOS.getDirName(__file__) + 'testSettings'
+		self.configPath = cOS.getDirName(__file__) + 'config'
+		cOS.copyTree(sourcePath, self.configPath)
+
+	def tearDownClass(self):
+		cOS.removeDir(self.configPath)
+
 	def setUp(self):
 		self.ogConfig = os.environ.get('ARK_CONFIG')
 		self.ogMode = os.environ.get('ARK_MODE')
@@ -115,17 +123,4 @@ class test(tryout.TestSuite):
 
 
 if __name__ == '__main__':
-	# fix: tryout should have startTest and endTest methods
-	sourcePath = cOS.getDirName(__file__) + 'testSettings'
-	configPath = cOS.getDirName(__file__) + 'config'
-	cOS.copyTree(sourcePath, configPath)
-
-	error = None
-	try:
-		tryout.run(test)
-	except Exception as err:
-		error = err
-
-	cOS.removeDir(configPath)
-	if error:
-		raise error
+	tryout.run(test)

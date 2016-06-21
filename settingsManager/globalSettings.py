@@ -4,7 +4,7 @@ import os
 from SettingsManager import SettingsManager
 import arkInit
 arkInit.init()
-import arkUtil
+# import arkUtil
 import cOS
 
 
@@ -23,9 +23,8 @@ class globalSettings(SettingsManager):
 			return
 		try:
 			settingsFile = self.rootDir + '/' + arkMode + '.json'
-			with open(settingsFile) as f:
-				extraSettings = arkUtil.parseJSON(f)
-				self.updateSettings(extraSettings)
+			print 'setfil:', settingsFile
+			self.updateFromFile(settingsFile)
 		except:
 			pass
 
@@ -82,7 +81,10 @@ class globalSettings(SettingsManager):
 	# runSetupScript handles all constants which need to be
 	def setup(self):
 	# found by lookups in env variable or other means
-		self.set('ARK_ROOT', os.environ.get('ARK_ROOT'))
+		self.set(
+			'ARK_ROOT',
+			os.environ.get('ARK_ROOT'))
+
 		if 'ARK_CURRENT_APP' in os.environ:
 			self.settings['ARK_CURRENT_APP'] = \
 				os.environ['ARK_CURRENT_APP'].lower()
@@ -93,3 +95,22 @@ class globalSettings(SettingsManager):
 		self.setComputerInfo()
 		self.setNetworkInfo()
 
+	def set(self, key, value=None):
+		'''
+		Set for globalSettings is different
+		as it doesn't save the settings.
+
+		Use a regular SettingsManager if you
+		want to save application-specific settings
+		'''
+		# if we have key value, make a new dict
+		if value is not None:
+			newSettings = {key: value}
+		# otherwise hopefully we passed a dict
+		elif type(key) == dict:
+			newSettings = key
+		else:
+			raise Exception('SettingsManager.set:' +
+				' Invalid data')
+
+		self.updateSettings(newSettings)
