@@ -82,7 +82,7 @@ class globalSettings(SettingsManager):
 	# runSetupScript handles all constants which need to be
 	def setup(self):
 	# found by lookups in env variable or other means
-		self.settings['ARK_ROOT'] = os.environ.get('ARK_ROOT')
+		self.set('ARK_ROOT', os.environ.get('ARK_ROOT'))
 		if 'ARK_CURRENT_APP' in os.environ:
 			self.settings['ARK_CURRENT_APP'] = \
 				os.environ['ARK_CURRENT_APP'].lower()
@@ -93,5 +93,3 @@ class globalSettings(SettingsManager):
 		self.setComputerInfo()
 		self.setNetworkInfo()
 
-def init():
-	return globalSettings()

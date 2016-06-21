@@ -4,7 +4,7 @@ import arkInit
 arkInit.init()
 import cOS
 import tryout
-import time
+# import time
 
 import settingsManager
 
@@ -79,6 +79,7 @@ class test(tryout.TestSuite):
 			settings.urlTest,
 			'http://192.168.0.75/api')
 
+
 if __name__ == '__main__':
 	# fix: tryout should have startTest and endTest methods
 	sourcePath = cOS.getDirName(__file__) + 'testSettings'
@@ -94,6 +95,3 @@ if __name__ == '__main__':
 	cOS.removeDir(configPath)
 	if error:
 		raise error
-
-
-

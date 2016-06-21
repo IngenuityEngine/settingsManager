@@ -31,6 +31,7 @@ class SettingsManager(Settings):
 		# try to load additional settings based on
 		# user, ark_mode, etc
 		self.overrideSettings()
+		self.updateSettings()
 
 		# self.set(self.settings)
 
@@ -75,8 +76,11 @@ class SettingsManager(Settings):
 		else:
 			return key
 
-	def updateSettings(self, settings):
-		self.settings = arkUtil.mergeDict(self.settings, settings)
+	def updateSettings(self, settings=None):
+		if settings is not None:
+			self.settings = arkUtil\
+				.mergeDict(self.settings, settings)
+
 		for key in self.settings:
 			setattr(self, key, self.get(key))
 

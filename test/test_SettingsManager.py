@@ -5,8 +5,6 @@ import os
 import arkInit
 arkInit.init()
 import settingsManager
-print 'wtf'
-print dir(settingsManager)
 import tryout
 import cOS
 
