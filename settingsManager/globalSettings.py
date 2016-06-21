@@ -91,9 +91,9 @@ class globalSettings(SettingsManager):
 
 	def setNetworkInfo(self):
 		if self.settings['COMPUTER_LOCATION'] != 'local':
-			self.settings['DATABASE'] = '108.60.58.20'
+			self.settings['DATABASE'] = 'http://108.60.58.20'
 		else:
-			self.settings['DATABASE'] = '192.168.0.75'
+			self.settings['DATABASE'] = 'http://192.168.0.75'
 		self.settings['DATABASE'] += '/api'
 
 	def setTempFolder(self):
