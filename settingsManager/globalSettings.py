@@ -40,7 +40,7 @@ class globalSettings(SettingsManager):
 		if not arkMode:
 			return
 		try:
-			settingsFile = self.rootDir + '/' + arkMode + '.json'
+			settingsFile = self.rootDir + arkMode + '.json'
 			self.updateFromFile(settingsFile)
 		except:
 			pass
