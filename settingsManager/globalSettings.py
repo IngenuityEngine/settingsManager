@@ -70,7 +70,7 @@ class globalSettings(SettingsManager):
 		# cross platform user root
 		self.settings['USER_ROOT'] = \
 			cOS.unixPath(os.path.expanduser('~'))
-		self.settings['LOCAL_USERNAME'] = \
+		self.settings['OS_USERNAME'] = \
 			os.environ.get('USERNAME')
 		self.settings['COMPUTER_NAME'] = \
 			os.environ.get('COMPUTERNAME')

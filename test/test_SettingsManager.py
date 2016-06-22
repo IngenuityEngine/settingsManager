@@ -118,6 +118,13 @@ class test(tryout.TestSuite):
 		self.assertEqual(settings.awesome, True)
 		self.assertTrue(os.path.isfile(settings.filename))
 
+	def make_new_settings_for_non_existant_app(self):
+		settings = settingsManager.getSettings('whatever')
+		settings.set('awesome', True)
+		settings = settingsManager.getSettings('whatever')
+		self.assertEqual(settings.awesome, True)
+		self.assertTrue(os.path.isfile(settings.filename))
+
 
 if __name__ == '__main__':
 	tryout.run(test)

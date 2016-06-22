@@ -7,6 +7,7 @@ import arkInit
 arkInit.init()
 
 import arkUtil
+import cOS
 
 
 class SettingsManager(Settings):
@@ -17,7 +18,8 @@ class SettingsManager(Settings):
 		self.appName = appName
 		self.user = user
 		self.settings = {}
-		self.rootDir = os.environ.get('ARK_CONFIG')
+		self.rootDir = cOS.ensureEndingSlash(
+			os.environ.get('ARK_CONFIG'))
 
 		# set the file we're trying to load
 		self.filename = self.getFilename(appName)
@@ -30,7 +32,11 @@ class SettingsManager(Settings):
 		# that are then used when loading the
 		# rest of the settings, ex: ARK_ROOT
 		self.setup()
-		self.updateFromFile(self.filename)
+		try:
+			self.updateFromFile(self.filename)
+		except:
+			print 'No settings exist for:', self.filename
+			pass
 
 		# try to load additional settings based on
 		# user, ark_mode, etc
@@ -46,7 +52,7 @@ class SettingsManager(Settings):
 		appName = arkUtil.makeWebSafe(appName)
 		if user:
 			user = arkUtil.makeWebSafe(user)
-			return self.rootDir + '/' + appName + \
+			return self.rootDir + appName + \
 			'.' + user + '.json'
 		else:
 			return self.rootDir + '/' + appName + '.json'

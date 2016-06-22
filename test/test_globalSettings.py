@@ -94,6 +94,8 @@ class test(tryout.TestSuite):
 		self.assertTrue(
 			settings.DATABASE is not False)
 		self.assertTrue(
+			'http' in settings.DATABASE)
+		self.assertTrue(
 			settings.ARK_ROOT is not False)
 		self.assertTrue(
 			settings.COMPUTER_TYPE is not False)
@@ -102,7 +104,7 @@ class test(tryout.TestSuite):
 		self.assertTrue(
 			settings.USER_ROOT is not False)
 		self.assertTrue(
-			settings.LOCAL_USERNAME is not False)
+			settings.OS_USERNAME is not False)
 		self.assertTrue(
 			settings.TEMP is not False)
 
