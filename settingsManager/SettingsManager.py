@@ -55,7 +55,7 @@ class SettingsManager(Settings):
 			return self.rootDir + appName + \
 			'.' + user + '.json'
 		else:
-			return self.rootDir + '/' + appName + '.json'
+			return self.rootDir + appName + '.json'
 
 	def updateFromFile(self, filename):
 		with open(filename) as f:
