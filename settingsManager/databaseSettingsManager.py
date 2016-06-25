@@ -38,6 +38,13 @@ class DatabaseSettingsManager(SettingsManager):
 					convertedSettings = arkUtil.parseJSON(setting['settings'])
 					self.updateSettings(convertedSettings)
 
+					# keep the user's settings around
+					# the idea here is to only save the things the user
+					# has changed, thus attempting to preserve
+					# the defaults whenever possible
+					self.customSettings = arkUtil\
+						.mergeDict(self.customSettings, convertedSettings)
+
 		for setting in self.settings:
 			setattr(self, setting, self.get(setting))
 

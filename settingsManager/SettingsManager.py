@@ -45,6 +45,9 @@ class SettingsManager(Settings):
 		self.overrideSettings()
 		self.updateSettings()
 
+		if not self.user:
+			self.customSettings = self.settings
+
 	# runSetupScript is an abstract function;
 	# if a particular settings manager
 	# needs to programmatically set settings
@@ -74,7 +77,7 @@ class SettingsManager(Settings):
 				lookup = self.settings[key]
 				return self.resolveKey(lookup)
 		else:
-			raise KeyError('%s is not a setting!' % key)
+			raise KeyError('%s is not a setting' % key)
 
 	def resolveKey(self, key):
 		keyType = type(key)
