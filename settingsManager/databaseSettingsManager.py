@@ -1,6 +1,7 @@
 import json
-# import arkInit
-# arkInit.init()
+import arkInit
+arkInit.init()
+import arkUtil
 # import cOS
 
 from SettingsManager import SettingsManager
@@ -8,65 +9,55 @@ from SettingsManager import SettingsManager
 
 class DatabaseSettingsManager(SettingsManager):
 
-	def __init__(self, database, token, user=None):
-		self._database = database
-		self._user = user
-		self._token = token
+	def __init__(self, database, appName, user=None):
+		self.database = database
+		self.user = user
+		self.appName = appName
 		self.settings = {}
+		self.customSettings = {}
 
-		basicSettings = self._database\
-					.find('settings')\
-					.where('key', 'is', token)\
-					.where('user','notexists')\
-					.execute()
+		basicSettings = self.database\
+			.find('settings')\
+			.where('key', 'is', self.appName)\
+			.where('user','notexists')\
+			.execute()
 
 		if basicSettings:
 			for setting in basicSettings:
-				convertedSettings = json.loads(setting['settings'])
-				self.settings.update(convertedSettings)
+				convertedSettings = arkUtil.parseJSON(setting['settings'])
+				self.updateSettings(convertedSettings)
 
-		if (self._user):
-			extraSettings = self._database\
-								.find('settings')\
-								.where('key', 'is', self._token)\
-								.where('user', 'is', self._user)\
-								.execute()
+		if self.user:
+			extraSettings = self.database\
+				.find('settings')\
+				.where('key', 'is', self.appName)\
+				.where('user', 'is', self.user)\
+				.execute()
 			if extraSettings:
 				for setting in extraSettings:
-					convertedSettings = json.loads(setting['settings'])
-					self.settings.update(convertedSettings)
+					convertedSettings = arkUtil.parseJSON(setting['settings'])
+					self.updateSettings(convertedSettings)
 
 		for setting in self.settings:
 			setattr(self, setting, self.get(setting))
 
-		self.set = self._set
-		self.save = self._save
-
-	def _set(self, key, value=None):
-		if value == None:
-			self.settings.update(key)
-			for setting in key:
-				setattr(self, key, self._get(key))
-		else:
-			self.settings[key] = value
-			setattr(self, key, self.get(key))
-
-	def _save(self):
+	def save(self):
 		allSettings = json.dumps(self.settings)
-		query = self._database\
+		query = self.database\
 			.update('settings')\
-			.where('key', 'is', self._token)\
+			.where('key', 'is', self.appName)\
 			.set('settings', allSettings)
-		if self._user:
-			query = query.where('user', 'is', self._user)
+
+		if self.user:
+			query = query.where('user', 'is', self.user)
 		else:
 			query = query.where('user', 'notexists')
 
 		result = query.execute()
 		if result['modified'] == 0:
-			data = {'key': self._token, 'settings': allSettings}
-			if self._user:
-				data['user'] = self._user
-			query = self._database\
+			data = {'key': self.appName, 'settings': allSettings}
+			if self.user:
+				data['user'] = self.user
+			query = self.database\
 						.create('settings', data)\
 						.execute()

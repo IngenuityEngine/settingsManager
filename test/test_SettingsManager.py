@@ -101,7 +101,7 @@ class test(tryout.TestSuite):
 	def setASettingAndSaveForANewUser(self):
 		settings = settingsManager.getSettings('sweetApp',
 			'newUser')
-		settings.set('autoRun', False)
+		settings.set('autoRun', False).save()
 
 		settings = settingsManager.getSettings('sweetApp',
 			'newUser')
@@ -111,7 +111,7 @@ class test(tryout.TestSuite):
 	def setASettingAndSaveForExistingUser(self):
 		settings = settingsManager.getSettings('sweetApp',
 			'blented')
-		settings.set('awesome', True)
+		settings.set('awesome', True).save()
 
 		settings = settingsManager.getSettings('sweetApp',
 			'blented')
@@ -120,7 +120,7 @@ class test(tryout.TestSuite):
 
 	def make_new_settings_for_non_existant_app(self):
 		settings = settingsManager.getSettings('whatever')
-		settings.set('awesome', True)
+		settings.set('awesome', True).save()
 		settings = settingsManager.getSettings('whatever')
 		self.assertEqual(settings.awesome, True)
 		self.assertTrue(os.path.isfile(settings.filename))

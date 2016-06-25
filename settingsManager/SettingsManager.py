@@ -18,6 +18,8 @@ class SettingsManager(Settings):
 		self.appName = appName
 		self.user = user
 		self.settings = {}
+		self.customSettings = {}
+
 		self.rootDir = cOS.ensureEndingSlash(
 			os.environ.get('ARK_CONFIG'))
 
@@ -43,10 +45,15 @@ class SettingsManager(Settings):
 		self.overrideSettings()
 		self.updateSettings()
 
-		# self.set(self.settings)
-
-		# for  in self.settings:
-		# 	setattr(self, key, self.get(key))
+	# runSetupScript is an abstract function;
+	# if a particular settings manager
+	# needs to programmatically set settings
+	# it can be done here
+	# settings run by runSetupScript can still
+	# be overriden by user-specific settings in
+	# their config file
+	def setup(self):
+		pass
 
 	def getFilename(self, appName, user=None):
 		appName = arkUtil.makeWebSafe(appName)
@@ -111,17 +118,26 @@ class SettingsManager(Settings):
 			pass
 			# raise IOError('This user does not exist yet!')
 
-	# runSetupScript is an abstract function;
-	# if a particular settings manager
-	# needs to programmatically set settings
-	# it can be done here
-	# settings run by runSetupScript can still
-	# be overriden by user-specific settings in
-	# their config file
-	def setup(self):
-		pass
 
 	def set(self, key, value=None):
+		# if we have key value, make a new dict
+		if value is not None:
+			newSettings = {key: value}
+		# otherwise hopefully we passed a dict
+		elif type(key) == dict:
+			newSettings = key
+		else:
+			raise Exception('SettingsManager.set:' +
+				' Invalid data')
+
+		self.updateSettings(newSettings)
+		self.customSettings = arkUtil.mergeDict(
+				self.customSettings, newSettings
+			)
+
+		return self
+
+	def save(self):
 		with open(self.filename, 'w+') as f:
 			# can error if the settings file doesn't
 			# exist yet
@@ -130,19 +146,8 @@ class SettingsManager(Settings):
 			except:
 				existingSettings = {}
 
-			# if we have key value, make a new dict
-			if value is not None:
-				newSettings = {key: value}
-			# otherwise hopefully we passed a dict
-			elif type(key) == dict:
-				newSettings = key
-			else:
-				raise Exception('SettingsManager.set:' +
-					' Invalid data')
-
-			self.updateSettings(newSettings)
 			existingSettings = arkUtil.mergeDict(
-				existingSettings, newSettings)
+				existingSettings, self.customSettings)
 
 			json.dump(existingSettings,
 				f,
