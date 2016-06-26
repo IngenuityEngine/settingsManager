@@ -11,6 +11,7 @@ properties
 class Settings(object):
 
 	def __init__(self, **kwargs):
+		self.settings = {}
 		self.set(**kwargs)
 
 	def set(self, **kwargs):

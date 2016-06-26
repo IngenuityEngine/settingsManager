@@ -11,6 +11,7 @@ import cOS
 class globalSettings(SettingsManager):
 
 	nodeTypes = ['render']
+	setKeysOnClass = True
 
 	def __init__(self):
 		super(globalSettings, self).__init__('default')

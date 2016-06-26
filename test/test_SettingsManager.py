@@ -32,12 +32,12 @@ class test(tryout.TestSuite):
 	def retrieveLiteralString(self):
 		settings = settingsManager.getSettings()
 		self.assertEqual(
-			settings.firstTest, 'testOne')
+			settings.get('firstTest'), 'testOne')
 
 	def retrieveLiteralList(self):
 		settings = settingsManager.getSettings()
 		self.assertEqual(
-			settings.listTest,
+			settings.get('listTest'),
 			[
 				'apples',
 				'pears'
@@ -46,31 +46,31 @@ class test(tryout.TestSuite):
 	def retrieveLiteralDict(self):
 		settings = settingsManager.getSettings()
 		self.assertEqual(
-			settings.dictTest,
+			settings.get('dictTest'),
 			{'other': 'test'})
 
 	def retrieveSubstitutedString(self):
 		settings = settingsManager.getSettings()
 		self.assertEqual(
-			settings.subTest,
+			settings.get('subTest'),
 			'testOne/testTwo')
 
-	def dotAndGetNotation(self):
-		settings = settingsManager.getSettings()
-		self.assertEqual(
-			settings.firstTest,
-			settings.get('firstTest'))
+	# def dotAndGetNotation(self):
+	# 	settings = settingsManager.getSettings()
+	# 	self.assertEqual(
+	# 		settings.firstTest,
+	# 		settings.get('firstTest'))
 
 	def loadAppSettings(self):
 		settings = settingsManager.getSettings('sweetApp')
 		self.assertEqual(
-			settings.firstTest,
+			settings.get('firstTest'),
 			'testModeOne')
 		self.assertEqual(
-			settings.listTest,
+			settings.get('listTest'),
 			'variable overwrite')
 		self.assertEqual(
-			settings.dictTest,
+			settings.get('dictTest'),
 			{
 				"more": "variables"
 			})
@@ -78,20 +78,20 @@ class test(tryout.TestSuite):
 	def handle_urls(self):
 		settings = settingsManager.getSettings()
 		self.assertEqual(
-			settings.urlTest,
+			settings.get('urlTest'),
 			'http://192.168.0.75/api')
 
 	def overrideSettingsWithUser(self):
 		settings = settingsManager.getSettings('sweetApp',
 			'blented')
 		self.assertEqual(
-			settings.firstTest,
+			settings.get('firstTest'),
 			'blented is awesome')
 		self.assertEqual(
-			settings.listTest,
+			settings.get('listTest'),
 			'variable overwrite')
 		self.assertEqual(
-			settings.dictTest,
+			settings.get('dictTest'),
 			{
 				"more": "variables",
 				"such": "dict",
@@ -105,7 +105,7 @@ class test(tryout.TestSuite):
 
 		settings = settingsManager.getSettings('sweetApp',
 			'newUser')
-		self.assertEqual(settings.autoRun, False)
+		self.assertEqual(settings.get('autoRun'), False)
 		self.assertTrue(os.path.isfile(settings.filename))
 
 	def setASettingAndSaveForExistingUser(self):
@@ -115,14 +115,14 @@ class test(tryout.TestSuite):
 
 		settings = settingsManager.getSettings('sweetApp',
 			'blented')
-		self.assertEqual(settings.awesome, True)
+		self.assertEqual(settings.get('awesome'), True)
 		self.assertTrue(os.path.isfile(settings.filename))
 
 	def make_new_settings_for_non_existant_app(self):
 		settings = settingsManager.getSettings('whatever')
 		settings.set('awesome', True).save()
 		settings = settingsManager.getSettings('whatever')
-		self.assertEqual(settings.awesome, True)
+		self.assertEqual(settings.get('awesome'), True)
 		self.assertTrue(os.path.isfile(settings.filename))
 
 

@@ -45,8 +45,8 @@ class DatabaseSettingsManager(SettingsManager):
 					self.customSettings = arkUtil\
 						.mergeDict(self.customSettings, convertedSettings)
 
-		for setting in self.settings:
-			setattr(self, setting, self.get(setting))
+		# for setting in self.settings:
+		# 	setattr(self, setting, self.get(setting))
 
 	def save(self):
 		allSettings = json.dumps(self.settings)

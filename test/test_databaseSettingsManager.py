@@ -81,24 +81,24 @@ class test(tryout.TestSuite):
 
 	def test_shouldLoadDefaultSettings(self):
 		self.databaseSettings = DatabaseSettingsManager(self.database, 'Test_DBSM')
-		self.assertEqual(self.databaseSettings.initialFile, 'someFile.txt')
-		self.assertEqual(self.databaseSettings.NumberPublished, 1)
+		self.assertEqual(self.databaseSettings.get('initialFile'), 'someFile.txt')
+		self.assertEqual(self.databaseSettings.get('NumberPublished'), 1)
 
 	def test_shouldLoadSpecificSettings(self):
 		self.databaseSettings = DatabaseSettingsManager(self.database, 'Test_DBSM', self.userId)
-		self.assertEqual(self.databaseSettings.initialFile, 'someFile.txt')
-		self.assertEqual(self.databaseSettings.NumberPublished, 2)
-		self.assertEqual(self.databaseSettings.Directory, 'SomeOtherDirectory')
-		self.assertEqual(self.databaseSettings.visible_fields, ['color', 'fileSize', 'stuff'])
+		self.assertEqual(self.databaseSettings.get('initialFile'), 'someFile.txt')
+		self.assertEqual(self.databaseSettings.get('NumberPublished'), 2)
+		self.assertEqual(self.databaseSettings.get('Directory'), 'SomeOtherDirectory')
+		self.assertEqual(self.databaseSettings.get('visible_fields'), ['color', 'fileSize', 'stuff'])
 
 	def test_shouldGetSetting(self):
 		self.databaseSettings = DatabaseSettingsManager(self.database, 'Test_DBSM', self.userId)
-		self.assertEqual(self.databaseSettings.visible_fields[1], 'fileSize')
+		self.assertEqual(self.databaseSettings.get('visible_fields')[1], 'fileSize')
 
 	def test_shouldSetSetting(self):
 		self.databaseSettings = DatabaseSettingsManager(self.database, 'Test_DBSM')
 		self.databaseSettings.set('errorLog', 'c:/fileOfStupidity.txt')
-		self.assertEqual(self.databaseSettings.errorLog, 'c:/fileOfStupidity.txt')
+		self.assertEqual(self.databaseSettings.get('errorLog'), 'c:/fileOfStupidity.txt')
 
 	def test_shouldSaveSettings(self):
 		self.databaseSettings = DatabaseSettingsManager(self.database, 'Test_DBSM', self.userId)
@@ -106,14 +106,14 @@ class test(tryout.TestSuite):
 		self.databaseSettings.save()
 		self.database = Database(databaseUrl)
 		newSettings = DatabaseSettingsManager(self.database, 'Test_DBSM', self.userId)
-		self.assertEqual(newSettings.background, 'green')
+		self.assertEqual(newSettings.get('background'), 'green')
 
 	def test_shouldCreateSettings(self):
 		self.databaseSettings = DatabaseSettingsManager(self.database, 'RandomApp', self.userId)
 		self.databaseSettings.set('stuffy', 'blahblah')
 		self.databaseSettings.save()
 		otherSettings = DatabaseSettingsManager(self.database, 'RandomApp', self.userId)
-		self.assertEqual(otherSettings.stuffy, 'blahblah')
+		self.assertEqual(otherSettings.get('stuffy'), 'blahblah')
 
 
 if __name__ == '__main__':

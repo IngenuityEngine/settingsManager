@@ -12,6 +12,12 @@ import cOS
 
 class SettingsManager(Settings):
 
+	# if True, keys will be set on the class instance
+	# ex: foo=bar will be class.foo = bar
+	# in this case all keys should be upper case
+	# to avoid collisions
+	setKeysOnClass = False
+
 	def __init__(self, appName='default', user=None):
 
 		# store the basics
@@ -101,8 +107,9 @@ class SettingsManager(Settings):
 			self.settings = arkUtil\
 				.mergeDict(self.settings, settings)
 
-		for key in self.settings:
-			setattr(self, key, self.get(key))
+		if self.setKeysOnClass:
+			for key in self.settings:
+				setattr(self, key, self.get(key))
 
 	def overrideSettings(self):
 		# bail if we don't have a user
