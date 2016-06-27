@@ -70,7 +70,7 @@ class globalSettings(SettingsManager):
 	def setComputerInfo(self):
 		# cross platform user root
 		self.settings['USER_ROOT'] = \
-			cOS.unixPath(os.path.expanduser('~'))
+			cOS.normalizeDir(os.path.expanduser('~'))
 		self.settings['OS_USERNAME'] = \
 			os.environ.get('USERNAME')
 		self.settings['COMPUTER_NAME'] = \

@@ -80,10 +80,10 @@ class SettingsManager(Settings):
 
 	def get(self, key):
 		if key in self.settings:
-				lookup = self.settings[key]
-				return self.resolveKey(lookup)
+			lookup = self.settings[key]
+			return self.resolveKey(lookup)
 		else:
-			raise KeyError('%s is not a setting' % key)
+			return None
 
 	def resolveKey(self, key):
 		keyType = type(key)
