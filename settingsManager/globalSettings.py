@@ -75,6 +75,8 @@ class globalSettings(SettingsManager):
 			os.environ.get('USERNAME')
 		self.settings['COMPUTER_NAME'] = \
 			os.environ.get('COMPUTERNAME')
+		self.settings['UNIQUE_NAME'] = \
+			os.environ.get('ARK_COMPUTER_NAME')
 
 		# Get the comp type from environment variable or guess if it's missing
 		if 'COMPUTER_TYPE' in os.environ:

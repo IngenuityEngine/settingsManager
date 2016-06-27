@@ -10,6 +10,7 @@ arkInit.init()
 from database import Database
 import tryout
 
+import settingsManager
 from settingsManager import DatabaseSettingsManager
 
 databaseUrl = 'http://127.0.0.1:80/api/'
@@ -31,7 +32,7 @@ class test(tryout.TestSuite):
 			{'name': self.testUserName})\
 			.execute()
 		# get the user's id
-		self.userId = self.database\
+		self.userID = self.database\
 			.find('user')\
 				.where('name','is',self.testUserName)\
 					.execute()[0]['_id']
@@ -48,7 +49,7 @@ class test(tryout.TestSuite):
 
 		self.database.create('settings', {
 			'key': 'Test_DBSM',
-			'user':  self.userId,
+			'user':  self.userID,
 			'settings':	json.dumps(
 						{
 							'visible_fields': ['color', 'fileSize', 'stuff'],
@@ -85,14 +86,14 @@ class test(tryout.TestSuite):
 		self.assertEqual(self.databaseSettings.get('NumberPublished'), 1)
 
 	def test_shouldLoadSpecificSettings(self):
-		self.databaseSettings = DatabaseSettingsManager(self.database, 'Test_DBSM', self.userId)
+		self.databaseSettings = DatabaseSettingsManager(self.database, 'Test_DBSM', self.userID)
 		self.assertEqual(self.databaseSettings.get('initialFile'), 'someFile.txt')
 		self.assertEqual(self.databaseSettings.get('NumberPublished'), 2)
 		self.assertEqual(self.databaseSettings.get('Directory'), 'SomeOtherDirectory')
 		self.assertEqual(self.databaseSettings.get('visible_fields'), ['color', 'fileSize', 'stuff'])
 
 	def test_shouldGetSetting(self):
-		self.databaseSettings = DatabaseSettingsManager(self.database, 'Test_DBSM', self.userId)
+		self.databaseSettings = DatabaseSettingsManager(self.database, 'Test_DBSM', self.userID)
 		self.assertEqual(self.databaseSettings.get('visible_fields')[1], 'fileSize')
 
 	def test_shouldSetSetting(self):
@@ -101,19 +102,28 @@ class test(tryout.TestSuite):
 		self.assertEqual(self.databaseSettings.get('errorLog'), 'c:/fileOfStupidity.txt')
 
 	def test_shouldSaveSettings(self):
-		self.databaseSettings = DatabaseSettingsManager(self.database, 'Test_DBSM', self.userId)
+		self.databaseSettings = DatabaseSettingsManager(self.database, 'Test_DBSM', self.userID)
 		self.databaseSettings.set('background', 'green')
 		self.databaseSettings.save()
 		self.database = Database(databaseUrl)
-		newSettings = DatabaseSettingsManager(self.database, 'Test_DBSM', self.userId)
+		newSettings = DatabaseSettingsManager(self.database, 'Test_DBSM', self.userID)
 		self.assertEqual(newSettings.get('background'), 'green')
 
 	def test_shouldCreateSettings(self):
-		self.databaseSettings = DatabaseSettingsManager(self.database, 'RandomApp', self.userId)
+		self.databaseSettings = DatabaseSettingsManager(self.database, 'Test_DBSM2', self.userID)
 		self.databaseSettings.set('stuffy', 'blahblah')
 		self.databaseSettings.save()
-		otherSettings = DatabaseSettingsManager(self.database, 'RandomApp', self.userId)
+		otherSettings = DatabaseSettingsManager(self.database, 'Test_DBSM2', self.userID)
 		self.assertEqual(otherSettings.get('stuffy'), 'blahblah')
+
+	# def test_shouldGetSettingsFromInitFunction(self):
+	# 	databaseSettings = settingsManager.databaseSettings(
+	# 		'Test_DBSM')
+	# 	self.assertEqual(databaseSettings.get('initialFile'), 'someFile.txt')
+
+	# 	databaseSettings = settingsManager.databaseSettings(
+	# 		'Test_DBSM', self.userID)
+	# 	self.assertEqual(databaseSettings.get('NumberPublished'), 2)
 
 
 if __name__ == '__main__':
