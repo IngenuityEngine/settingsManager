@@ -68,30 +68,6 @@ class globalSettings(SettingsManager):
 		# 	self.settings['ARK_SHARED_ROOT']
 
 	def setComputerInfo(self):
-		if cOS.isLinux() or cOS.isMac():
-			# cross platform user root
-			self.settings['USER_ROOT'] = \
-				cOS.normalizeDir(os.path.expanduser('~'))
-			self.settings['OS_USERNAME'] = \
-				os.environ.get('USER')
-			self.settings['COMPUTER_NAME'] = \
-				os.environ.get('HOSTNAME')
-			self.settings['UNIQUE_NAME'] = \
-				os.environ.get('ARK_COMPUTER_NAME')
-
-			# Get the comp type from environment variable or guess if it's missing
-			if 'COMPUTER_TYPE' in os.environ:
-				self.settings['COMPUTER_TYPE'] = \
-					os.environ.get('COMPUTER_TYPE')
-			elif 'RENDER' in os.environ['HOSTNAME']:
-				self.settings['COMPUTER_TYPE'] = 'render'
-			else:
-				self.settings['COMPUTER_TYPE'] = 'workstation'
-
-			self.settings['IS_NODE'] = \
-				self.settings['COMPUTER_TYPE'] in self.nodeTypes
-			self.settings['COMPUTER_LOCATION'] = \
-				os.environ.get('COMPUTER_LOCATION', 'local')
 		if cOS.isWindows():
 			# cross platform user root
 			self.settings['USER_ROOT'] = \
@@ -116,6 +92,31 @@ class globalSettings(SettingsManager):
 				self.settings['COMPUTER_TYPE'] in self.nodeTypes
 			self.settings['COMPUTER_LOCATION'] = \
 				os.environ.get('COMPUTER_LOCATION', 'local')
+		elif cOS.isLinux() or cOS.isMac():
+			# cross platform user root
+			self.settings['USER_ROOT'] = \
+				cOS.normalizeDir(os.path.expanduser('~'))
+			self.settings['OS_USERNAME'] = \
+				os.environ.get('USER')
+			self.settings['COMPUTER_NAME'] = \
+				os.environ.get('HOSTNAME')
+			self.settings['UNIQUE_NAME'] = \
+				os.environ.get('ARK_COMPUTER_NAME')
+
+			# Get the comp type from environment variable or guess if it's missing
+			if 'COMPUTER_TYPE' in os.environ:
+				self.settings['COMPUTER_TYPE'] = \
+					os.environ.get('COMPUTER_TYPE')
+			elif 'RENDER' in os.environ['HOSTNAME']:
+				self.settings['COMPUTER_TYPE'] = 'render'
+			else:
+				self.settings['COMPUTER_TYPE'] = 'workstation'
+
+			self.settings['IS_NODE'] = \
+				self.settings['COMPUTER_TYPE'] in self.nodeTypes
+			self.settings['COMPUTER_LOCATION'] = \
+				os.environ.get('COMPUTER_LOCATION', 'local')
+
 
 	def setNetworkInfo(self):
 		if self.settings['COMPUTER_LOCATION'] != 'local':
