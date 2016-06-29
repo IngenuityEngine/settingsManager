@@ -47,25 +47,24 @@ class globalSettings(SettingsManager):
 			pass
 
 	def setSharedRoot(self):
-		if 'ARK_SHARED_ROOT' in self.settings and \
-			self.settings['ARK_SHARED_ROOT'] is not None:
+		if self.settings.get('SHARED_ROOT'):
 			# do nothing since it's already set
 			pass
 		elif 'ARK_SHARED_ROOT' in os.environ:
-			self.settings['ARK_SHARED_ROOT'] = \
+			self.settings['SHARED_ROOT'] = \
 				os.environ.get('ARK_SHARED_ROOT')
 		elif cOS.isWindows():
-			self.settings['ARK_SHARED_ROOT'] = \
+			self.settings['SHARED_ROOT'] = \
 				'r:/'
 		elif cOS.isMac():
-			self.settings['ARK_SHARED_ROOT'] = \
+			self.settings['SHARED_ROOT'] = \
 				'/Volumes/rambuglar_work/'
 		elif cOS.isLinux():
-			self.settings['ARK_SHARED_ROOT'] = \
+			self.settings['SHARED_ROOT'] = \
 				'/mnt/ramburglar/'
 
-		# print 'ARK_SHARED_ROOT:', \
-		# 	self.settings['ARK_SHARED_ROOT']
+		# print 'SHARED_ROOT:', \
+		# 	self.settings['SHARED_ROOT']
 
 	def setComputerInfo(self):
 		if cOS.isWindows():

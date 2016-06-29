@@ -100,7 +100,7 @@ class test(tryout.TestSuite):
 		self.assertTrue(
 			settings.COMPUTER_TYPE is not False)
 		self.assertTrue(
-			settings.ARK_SHARED_ROOT is not False)
+			settings.SHARED_ROOT is not False)
 		self.assertTrue(
 			settings.USER_ROOT is not False)
 		self.assertTrue(
