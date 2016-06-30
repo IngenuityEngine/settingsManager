@@ -107,6 +107,12 @@ class test(tryout.TestSuite):
 			settings.OS_USERNAME is not False)
 		self.assertTrue(
 			settings.TEMP is not False)
+		self.assertTrue(
+			settings.ARK_CONFIG is not None)
+		self.assertTrue(
+			settings.ARK_PYTHON is not None)
+		self.assertTrue(
+			settings.ARK_PYTHONLIB is not None)
 
 if __name__ == '__main__':
 	tryout.run(test)
