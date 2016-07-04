@@ -14,6 +14,9 @@ class globalSettings(SettingsManager):
 	setKeysOnClass = True
 
 	def __init__(self):
+
+		self.MODE = os.environ.get('ARK_MODE', 'default').lower()
+
 		super(globalSettings, self).__init__('default')
 
 	# runSetupScript handles all constants which need to be
@@ -40,11 +43,10 @@ class globalSettings(SettingsManager):
 	# overrideSettings gets overriden as global settings does
 	# not follow the <app>.<user>.json naming conventino
 	def overrideSettings(self):
-		arkMode = os.environ.get('ARK_MODE', None)
-		if not arkMode:
+		if self.MODE == 'default':
 			return
 		try:
-			settingsFile = self.rootDir + arkMode + '.json'
+			settingsFile = self.rootDir + self.MODE + '.json'
 			self.updateFromFile(settingsFile)
 		except:
 			pass
@@ -121,7 +123,9 @@ class globalSettings(SettingsManager):
 
 
 	def setNetworkInfo(self):
-		if self.settings['COMPUTER_LOCATION'] != 'local':
+		if self.MODE == 'test':
+			self.settings['DATABASE'] = 'http://127.0.0.1'
+		elif self.settings['COMPUTER_LOCATION'] != 'local':
 			self.settings['DATABASE'] = 'http://108.60.58.20'
 		else:
 			self.settings['DATABASE'] = 'http://192.168.0.75'
