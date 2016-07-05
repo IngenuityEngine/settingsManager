@@ -14,14 +14,20 @@ class globalSettings(SettingsManager):
 	setKeysOnClass = True
 
 	def __init__(self):
+
+		self.MODE = os.environ.get('ARK_MODE', 'default').lower()
+
 		super(globalSettings, self).__init__('default')
 
 	# runSetupScript handles all constants which need to be
 	def setup(self):
 	# found by lookups in env variable or other means
-		self.set(
-			'ARK_ROOT',
-			os.environ.get('ARK_ROOT'))
+		self.set({
+			'ARK_ROOT': os.environ.get('ARK_ROOT'),
+			'ARK_CONFIG': os.environ.get('ARK_CONFIG'),
+			'ARK_PYTHON': os.environ.get('ARK_PYTHON'),
+			'ARK_PYTHONLIB': os.environ.get('ARK_PYTHONLIB'),
+		})
 
 		if 'ARK_CURRENT_APP' in os.environ:
 			self.settings['ARK_CURRENT_APP'] = \
@@ -37,35 +43,33 @@ class globalSettings(SettingsManager):
 	# overrideSettings gets overriden as global settings does
 	# not follow the <app>.<user>.json naming conventino
 	def overrideSettings(self):
-		arkMode = os.environ.get('ARK_MODE', None)
-		if not arkMode:
+		if self.MODE == 'default':
 			return
 		try:
-			settingsFile = self.rootDir + arkMode + '.json'
+			settingsFile = self.rootDir + self.MODE + '.json'
 			self.updateFromFile(settingsFile)
 		except:
 			pass
 
 	def setSharedRoot(self):
-		if 'ARK_SHARED_ROOT' in self.settings and \
-			self.settings['ARK_SHARED_ROOT'] is not None:
+		if self.settings.get('SHARED_ROOT'):
 			# do nothing since it's already set
 			pass
 		elif 'ARK_SHARED_ROOT' in os.environ:
-			self.settings['ARK_SHARED_ROOT'] = \
+			self.settings['SHARED_ROOT'] = \
 				os.environ.get('ARK_SHARED_ROOT')
 		elif cOS.isWindows():
-			self.settings['ARK_SHARED_ROOT'] = \
+			self.settings['SHARED_ROOT'] = \
 				'r:/'
 		elif cOS.isMac():
-			self.settings['ARK_SHARED_ROOT'] = \
+			self.settings['SHARED_ROOT'] = \
 				'/Volumes/rambuglar_work/'
 		elif cOS.isLinux():
-			self.settings['ARK_SHARED_ROOT'] = \
+			self.settings['SHARED_ROOT'] = \
 				'/mnt/ramburglar/'
 
-		# print 'ARK_SHARED_ROOT:', \
-		# 	self.settings['ARK_SHARED_ROOT']
+		# print 'SHARED_ROOT:', \
+		# 	self.settings['SHARED_ROOT']
 
 	def setComputerInfo(self):
 		if cOS.isWindows():
@@ -119,7 +123,9 @@ class globalSettings(SettingsManager):
 
 
 	def setNetworkInfo(self):
-		if self.settings['COMPUTER_LOCATION'] != 'local':
+		if self.MODE == 'test':
+			self.settings['DATABASE'] = 'http://127.0.0.1'
+		elif self.settings['COMPUTER_LOCATION'] != 'local':
 			self.settings['DATABASE'] = 'http://108.60.58.20'
 		else:
 			self.settings['DATABASE'] = 'http://192.168.0.75'
