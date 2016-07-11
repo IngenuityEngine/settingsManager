@@ -123,15 +123,13 @@ class globalSettings(SettingsManager):
 
 
 	def setNetworkInfo(self):
-		if self.MODE == 'test':
-			self.settings['DATABASE_ROOT'] = '127.0.0.1'
-		elif self.settings['COMPUTER_LOCATION'] != 'local':
-			self.settings['DATABASE_ROOT'] = '108.60.58.20'
-		else:
-			self.settings['DATABASE_ROOT'] = '192.168.0.75'
-
-		self.settings['DATABASE'] = \
-			'http://' + self.settings['DATABASE_ROOT'] + '/api'
+		pass
+		# elif self.settings['COMPUTER_LOCATION'] != 'local':
+		# 	self.settings['DATABASE_ROOT'] = '108.60.58.20'
+		# else:
+		# 	self.settings['DATABASE_ROOT'] = '192.168.0.75'
+		# self.settings['DATABASE'] = \
+		# 	'http://' + self.settings['DATABASE_ROOT'] + '/api'
 
 	def setTempFolder(self):
 		if 'TEMP' in self.settings and \
