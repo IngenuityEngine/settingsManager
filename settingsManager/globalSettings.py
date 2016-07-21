@@ -87,6 +87,8 @@ class globalSettings(SettingsManager):
 					os.environ.get('COMPUTER_TYPE')
 			elif 'RENDER' in os.environ['COMPUTERNAME']:
 				self.settings['COMPUTER_TYPE'] = 'render'
+			elif os.path.exists(os.environ.get('ARK_ROOT') + 'ark/.git'):
+				self.settings['COMPUTER_TYPE'] = 'developer'
 			else:
 				self.settings['COMPUTER_TYPE'] = 'workstation'
 
