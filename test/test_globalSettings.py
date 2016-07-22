@@ -84,7 +84,7 @@ class test(tryout.TestSuite):
 		settings = settingsManager.globalSettings()
 		self.assertEqual(
 			settings.urlTest,
-			'http://192.168.0.75/api')
+			'http://127.0.0.1/api')
 
 	def actual_settings(self):
 		os.environ['ARK_CONFIG'] = self.ogConfig

@@ -79,7 +79,7 @@ class test(tryout.TestSuite):
 		settings = settingsManager.getSettings()
 		self.assertEqual(
 			settings.get('urlTest'),
-			'http://192.168.0.75/api')
+			'http://127.0.0.1/api')
 
 	def overrideSettingsWithUser(self):
 		settings = settingsManager.getSettings('sweetApp',
