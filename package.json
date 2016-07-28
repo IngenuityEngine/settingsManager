@@ -1,36 +1,41 @@
 {
-	"name": "settingsmanager",
-	"version": "1.0.5",
-	"description": "A class that eases the getting and setting of settings through json config files.",
-	"main": "./settingsManager/settingsFactory.js",
-	"directories": {
-		"test": "test"
-	},
-	"dependencies": {
-		"async": "^1.4.2",
-		"debug": "*",
-		"arkutil": "^0.0.4",
-		"expect.js": "*",
-		"chai": "^3.2.0",
-		"fs": "^0.0.2",
-		"uberclass": "^1.0.1",
-		"lodash": "^3.10.1",
-		"underscore.string": "^3.2.0"
-	},
-	"devDependencies": {
-		"mocha": "^2.2.5"
-	},
-	"scripts": {
-		"test": "mocha"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/IngenuityEngine/settingsManager.git"
-	},
-	"author": "",
-	"license": "ISC",
-	"bugs": {
-		"url": "https://github.com/IngenuityEngine/settingsManager/issues"
-	},
-	"homepage": "https://github.com/IngenuityEngine/settingsManager#readme"
+  "name": "settingsmanager",
+  "version": "1.0.11",
+  "description": "A class that eases the getting and setting of settings through json config files.",
+  "main": "./settingsManager/settingsFactory.js",
+  "directories": {
+    "test": "test"
+  },
+  "files": [
+    "settingsManager/settingsFactory.js",
+    "settingsManager/globalSettings.js",
+    "settingsManager/settingsManager.js",
+    "test/test_globalSettings.js",
+    "test/test_settingsManager.js"
+  ],
+  "dependencies": {
+    "async": "*",
+    "debug": "*",
+    "arkutil": "*",
+    "expect.js": "*",
+    "uberclass": "^1.0.1",
+    "lodash": "^4",
+    "underscore.string": "^3"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.5"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IngenuityEngine/settingsManager.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IngenuityEngine/settingsManager/issues"
+  },
+  "homepage": "https://github.com/IngenuityEngine/settingsManager#readme"
 }
