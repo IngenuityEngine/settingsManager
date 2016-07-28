@@ -6,6 +6,13 @@
   "directories": {
     "test": "test"
   },
+  "files": [
+    "./settingsManager/settingsFactory.js",
+    "./settingsManager/globalSettings.js",
+    "./settingsManager/settingsManager.js",
+    "./test/test_globalSettings.js",
+    "./test/test_settingsManager.js"
+  ],
   "dependencies": {
     "async": "^1.4.2",
     "debug": "*",
