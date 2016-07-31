@@ -14,7 +14,7 @@ class globalSettings(SettingsManager):
 	setKeysOnClass = True
 
 	def __init__(self):
-		self.MODE = os.environ.get('ARK_MODE', 'default').lower()
+		self.MODE = os.environ.get('mode', 'default').lower()
 		super(globalSettings, self).__init__('default')
 
 	# runSetupScript handles all constants which need to be

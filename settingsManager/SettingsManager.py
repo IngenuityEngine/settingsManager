@@ -47,7 +47,7 @@ class SettingsManager(Settings):
 			pass
 
 		# try to load additional settings based on
-		# user, ark_mode, etc
+		# user, mode, etc
 		self.overrideSettings()
 		self.updateSettings()
 
