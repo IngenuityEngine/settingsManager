@@ -19,16 +19,16 @@ class test(tryout.TestSuite):
 
 	def setUp(self):
 		self.ogConfig = os.environ.get('ARK_CONFIG')
-		self.ogMode = os.environ.get('ARK_MODE')
+		self.ogMode = os.environ.get('mode')
 		configPath = cOS.getDirName(__file__) + 'config'
 		os.environ['ARK_CONFIG'] = configPath
-		os.environ['ARK_MODE'] = 'default'
+		os.environ['mode'] = 'default'
 
 	def tearDown(self):
 		if self.ogConfig:
 			os.environ['ARK_CONFIG'] = self.ogConfig
 		if self.ogMode:
-			os.environ['ARK_MODE'] = self.ogMode
+			os.environ['mode'] = self.ogMode
 
 
 	def shouldRetrieveLiteralString(self):
@@ -64,7 +64,7 @@ class test(tryout.TestSuite):
 			settings.get('firstTest'))
 
 	def shouldBeAbleToOverrideSettings(self):
-		os.environ['ARK_MODE'] = 'sweetApp'
+		os.environ['mode'] = 'sweetApp'
 		settings = settingsManager.globalSettings()
 
 		self.assertEqual(
@@ -88,7 +88,7 @@ class test(tryout.TestSuite):
 
 	def actual_settings(self):
 		os.environ['ARK_CONFIG'] = self.ogConfig
-		os.environ['ARK_MODE'] = 'default'
+		os.environ['mode'] = 'default'
 		settings = settingsManager.globalSettings()
 
 		self.assertTrue(

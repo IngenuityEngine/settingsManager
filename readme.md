@@ -11,7 +11,7 @@ globalSettings is meant for GLOBAL configurations. Once you initialize it, you s
 ```
    import settingsManager
    globalSettings = settingsManager.globalSettings()
-   
+
    ark_root = globalSettings.ARK_ROOT
 ```
 settingsManager.SettingsManager works exactly the same, but is intended to give you application-specific, and if needs be, user-specific settings.
@@ -31,7 +31,7 @@ The config files are usual json files(which allow commenting by double slashes).
 By default, the settingsManagers will search for this file in the path given by the environment
 variable 'ARK_CONFIG', or, failing to find such a variable, c:/ie/config.
 
-globalSettings will by default load in the file 'default.json' that is stored in this location. It will then load in any additional settings (or update already existing settings) as determined by the mode specified by the environment variable 'ARK_MODE'. If there is no ARK_MODE, or if ARK_MODE is listed as 'default', you're pretty much stuck with the default settings. However, if ARK_MODE is, for example, 'test', globalSettings will load in 'test.json' (again, in the default config path) and fill in those settings.
+globalSettings will by default load in the file 'default.json' that is stored in this location. It will then load in any additional settings (or update already existing settings) as determined by the mode specified by the environment variable 'mode'. If there is no mode, or if mode is listed as 'default', you're pretty much stuck with the default settings. However, if mode is, for example, 'test', globalSettings will load in 'test.json' (again, in the default config path) and fill in those settings.
 
 settingsManager works similarly. If ARK_CONFIG is set to 'c:/ie/config', and we invoke SettingsManager('Nuke'), the settings in the file 'c:/ie/config/Nuke.json' will be loaded by the settingsManager. SettingsManager also allows user specifications; if I initialize SettingsManager('Nuke', 'Rando'), it will first load in 'c:/ie/config/Nuke.json' and then overwrite and augment settings with the settings in 'c:/ie/config/Nuke.Rando.json'.
 
