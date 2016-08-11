@@ -2,6 +2,7 @@
 /////////////////////////
 var _ = require('lodash')
 var Class = require('uberclass')
+var args = require('optimist').argv
 
 // Our Modules
 ///////////////////////
@@ -34,5 +35,9 @@ init: function(searchPaths, modes)
 			}
 		})
 	})
+
+	// finally merge the args in overtop of everything
+	_.merge(self, args)
+	_.merge(self.settings, args)
 }
 })
