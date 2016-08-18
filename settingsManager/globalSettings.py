@@ -93,8 +93,10 @@ class globalSettings(SettingsManager):
 			self.settings['SHARED_ROOT'] = \
 				'/Volumes/rambuglar_work/'
 		elif cOS.isLinux():
+			# Note: ramburglar is mounted to /mnt/ramb/
+			# Should always be symlinked to /ramburglar/
 			self.settings['SHARED_ROOT'] = \
-				'/mnt/ramb/'
+				'/ramburglar/'
 
 		# print 'SHARED_ROOT:', \
 		# 	self.settings['SHARED_ROOT']
@@ -114,8 +116,10 @@ class globalSettings(SettingsManager):
 			self.settings['ASSETS_ROOT'] = \
 				'/Volumes/raidcharles/work/'
 		elif cOS.isLinux():
+			# Note: raidcharles is mounted to /mnt/raid/
+			# Should always be symlinked to /raidcharles/
 			self.settings['ASSETS_ROOT'] = \
-				'/mnt/raid/work/'
+				'/raidcharles/'
 
 		# print 'ASSETS_ROOT:', \
 		# 	self.settings['ASSETS_ROOT']
