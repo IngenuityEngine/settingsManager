@@ -74,7 +74,6 @@ class globalSettings(SettingsManager):
 			return
 		try:
 			settingsFile = self.rootDir + self.MODE + '.json'
-			print 'i am updating from settingsFile:', settingsFile
 			self.updateFromFile(settingsFile)
 		except:
 			pass
