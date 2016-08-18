@@ -93,7 +93,7 @@ class globalSettings(SettingsManager):
 				'/Volumes/rambuglar_work/'
 		elif cOS.isLinux():
 			self.settings['SHARED_ROOT'] = \
-				'/mnt/ramburglar/'
+				'/mnt/ramb/'
 
 		# print 'SHARED_ROOT:', \
 		# 	self.settings['SHARED_ROOT']
