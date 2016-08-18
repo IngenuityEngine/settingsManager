@@ -13,14 +13,14 @@ class test(tryout.TestSuite):
 	title = 'test/test_globalSettings.py'
 
 	def setUpClass(self):
-		sourcePath = cOS.getDirName(__file__) + 'testSettings'
-		self.configPath = cOS.getDirName(__file__) + 'config'
+		sourcePath = cOS.getDirName(os.path.realpath(__file__)) + 'testSettings'
+		self.configPath = cOS.getDirName(os.path.realpath(__file__)) + 'config'
 		cOS.copyTree(sourcePath, self.configPath)
 
 	def setUp(self):
 		self.ogConfig = os.environ.get('ARK_CONFIG')
 		self.ogMode = os.environ.get('mode')
-		configPath = cOS.getDirName(__file__) + 'config'
+		configPath = cOS.getDirName(os.path.realpath(__file__)) + 'config'
 		os.environ['ARK_CONFIG'] = configPath
 		os.environ['mode'] = 'default'
 
@@ -29,7 +29,6 @@ class test(tryout.TestSuite):
 			os.environ['ARK_CONFIG'] = self.ogConfig
 		if self.ogMode:
 			os.environ['mode'] = self.ogMode
-
 
 	def shouldRetrieveLiteralString(self):
 		settings = settingsManager.globalSettings()
@@ -113,6 +112,70 @@ class test(tryout.TestSuite):
 			settings.ARK_PYTHON is not None)
 		self.assertTrue(
 			settings.ARK_PYTHONLIB is not None)
+
+	# Should get 'normal' program vars
+	def program_vars(self):
+		os.environ['ARK_CONFIG'] = self.ogConfig
+		os.environ['mode'] = 'default'
+		settings = settingsManager.globalSettings()
+
+		self.assertTrue(
+			settings.THIRDPARTY is not None)
+		self.assertTrue(
+			settings.VRAY_EXE is not None)
+		self.assertTrue(
+			settings.MAX_ROOT is not None)
+
+	def shouldResolveWindowsProgramVars(self):
+		os.environ['ARK_CONFIG'] = self.ogConfig
+		os.environ['mode'] = 'default'
+		settings = settingsManager.globalSettings()
+
+		if cOS.isWindows():
+			self.assertTrue(
+				settings.THIRDPARTY is not None)
+			self.assertTrue(
+				settings.VRAY_EXE is not None)
+			self.assertTrue(
+				settings.MAX_ROOT is not None)
+			self.assertTrue(
+				settings.MAYA_ROOT is not False)
+			self.assertEqual(
+				settings.MAYA_ROOT, settings.MAYA_ROOT_WIN)
+			self.assertNotEqual(
+				settings.MAYA_ROOT, settings.MAYA_ROOT_LINUX)
+			self.assertTrue(
+				settings.MODO_ROOT is not False)
+			self.assertEqual(
+				settings.MODO_ROOT, settings.MODO_ROOT_WIN)
+			self.assertNotEqual(
+				settings.MODO_ROOT, settings.MODO_ROOT_LINUX)
+
+			self.assertEqual(
+				settings.VRAY_EXE, 'C:/Program Files/Autodesk/Maya2016/vray/bin/vray.exe')
+
+		if cOS.isLinux():
+			self.assertTrue(
+				settings.THIRDPARTY is not None)
+			self.assertTrue(
+				settings.VRAY_EXE is not None)
+			self.assertTrue(
+				settings.MAX_ROOT is not None)
+			self.assertTrue(
+				settings.MAYA_ROOT is not False)
+			self.assertEqual(
+				settings.MAYA_ROOT, settings.MAYA_ROOT_LINUX)
+			self.assertNotEqual(
+				settings.MAYA_ROOT, settings.MAYA_ROOT_LINUX)
+			self.assertTrue(
+				settings.MODO_ROOT is not False)
+			self.assertEqual(
+				settings.MODO_ROOT, settings.MODO_ROOT_LINUX)
+			self.assertNotEqual(
+				settings.MODO_ROOT, settings.MODO_ROOT_LINUX)
+
+			self.assertEqual(
+				settings.VRAY_EXE, '/usr/local/Autodesk/Maya2016/vray/bin/vray.exe')
 
 if __name__ == '__main__':
 	tryout.run(test)

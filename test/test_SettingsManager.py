@@ -12,14 +12,14 @@ class test(tryout.TestSuite):
 	title = 'test/test_SettingsManager.py'
 
 	def setUpClass(self):
-		sourcePath = cOS.getDirName(__file__) + 'testSettings'
-		self.configPath = cOS.getDirName(__file__) + 'config'
+		sourcePath = cOS.getDirName(os.path.realpath(__file__)) + 'testSettings'
+		self.configPath = cOS.getDirName(os.path.realpath(__file__)) + 'config'
 		cOS.copyTree(sourcePath, self.configPath)
 
 	def setUp(self):
 		self.ogConfig = os.environ.get('ARK_CONFIG')
 		self.ogMode = os.environ.get('mode')
-		configPath = cOS.getDirName(__file__) + 'config'
+		configPath = cOS.getDirName(os.path.realpath(__file__)) + 'config'
 		os.environ['ARK_CONFIG'] = configPath
 		os.environ['mode'] = 'default'
 
@@ -124,7 +124,6 @@ class test(tryout.TestSuite):
 		settings = settingsManager.getSettings('whatever')
 		self.assertEqual(settings.get('awesome'), True)
 		self.assertTrue(os.path.isfile(settings.filename))
-
 
 if __name__ == '__main__':
 	tryout.run(test)

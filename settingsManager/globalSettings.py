@@ -1,12 +1,12 @@
 import os
-# import sys
+import sys
 
 from SettingsManager import SettingsManager
 import arkInit
 arkInit.init()
 # import arkUtil
 import cOS
-
+import arkUtil
 
 class globalSettings(SettingsManager):
 
@@ -38,6 +38,33 @@ class globalSettings(SettingsManager):
 		self.setComputerInfo()
 		self.setNetworkInfo()
 		self.setTempFolder()
+
+	# handle WIN/LINUX paths
+	# if this computer is Linux, find all *_LINUX keys in self.settings
+	# and modify to regular
+	# if computers, find all *_WIN keys and modify to regular
+	# NUKE_ROOT_WIN and NUKE_ROOT_LINUX --> NUKE_ROOT
+	def handlePlatforms(self):
+		if cOS.isWindows():
+			for key, value in self.settings.iteritems():
+				if key.endswith('_WIN'):
+					newKey = key[:-4]
+					self.settings[newKey] = value
+		elif cOS.isLinux():
+			for key, value in self.settings.iteritems():
+				if key.endswith('_LINUX'):
+					newKey = key[:-6]
+					self.settings[newKey] = value
+		else:
+			raise Exception('Not yet applicable for operating system:', sys.platform)
+
+	# Override inherited function updateFromFile to additionally call
+	# handlePlatforms - resolving Linux/Windows vars
+	def updateFromFile(self, filename):
+		with open(filename) as f:
+			settings = arkUtil.parseJSON(f)
+			self.updateSettings(settings)
+		self.handlePlatforms()
 
 	# overrideSettings gets overriden as global settings does
 	# not follow the <app>.<user>.json naming conventino
@@ -143,7 +170,6 @@ class globalSettings(SettingsManager):
 				self.settings['COMPUTER_TYPE'] in self.nodeTypes
 			self.settings['COMPUTER_LOCATION'] = \
 				os.environ.get('COMPUTER_LOCATION', 'local')
-
 
 	def setNetworkInfo(self):
 		pass
