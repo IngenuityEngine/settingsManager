@@ -34,6 +34,7 @@ class globalSettings(SettingsManager):
 			self.settings['ARK_CURRENT_APP'] = 'standalone'
 
 		self.setSharedRoot()
+		self.setAssetsRoot()
 		self.setComputerInfo()
 		self.setNetworkInfo()
 		self.setTempFolder()
@@ -76,6 +77,7 @@ class globalSettings(SettingsManager):
 		except:
 			pass
 
+	# Set ramburglar shared drive root
 	def setSharedRoot(self):
 		if self.settings.get('SHARED_ROOT'):
 			# do nothing since it's already set
@@ -91,10 +93,31 @@ class globalSettings(SettingsManager):
 				'/Volumes/rambuglar_work/'
 		elif cOS.isLinux():
 			self.settings['SHARED_ROOT'] = \
-				'/mnt/ramburglar/'
+				'/mnt/ramb/'
 
 		# print 'SHARED_ROOT:', \
 		# 	self.settings['SHARED_ROOT']
+
+	# Set raidcharles assets drive root
+	def setAssetsRoot(self):
+		if self.settings.get('ASSETS_ROOT'):
+			# do nothing since it's already set
+			pass
+		elif 'ARK_ASSETS_ROOT' in os.environ:
+			self.settings['ASSETS_ROOT'] = \
+				os.environ.get('ARK_ASSETS_ROOT')
+		elif cOS.isWindows():
+			self.settings['ASSETS_ROOT'] = \
+				'q:/'
+		elif cOS.isMac():
+			self.settings['ASSETS_ROOT'] = \
+				'/Volumes/raidcharles/work/'
+		elif cOS.isLinux():
+			self.settings['ASSETS_ROOT'] = \
+				'/mnt/raid/work/'
+
+		# print 'ASSETS_ROOT:', \
+		# 	self.settings['ASSETS_ROOT']
 
 	def setComputerInfo(self):
 		if cOS.isWindows():
