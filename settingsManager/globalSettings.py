@@ -13,7 +13,9 @@ class globalSettings(SettingsManager):
 	setKeysOnClass = True
 
 	def __init__(self):
-		self.MODE = os.environ.get('mode', 'default').lower()
+		self.MODE = os.environ.get('mode', 'default')
+		# Note: Linux is case sensitive, so we cannot lower the mode
+		# self.MODE = os.environ.get('mode', 'default').lower()
 		super(globalSettings, self).__init__('default')
 
 	# runSetupScript handles all constants which need to be
@@ -71,6 +73,7 @@ class globalSettings(SettingsManager):
 			return
 		try:
 			settingsFile = self.rootDir + self.MODE + '.json'
+			print 'i am updating from settingsFile:', settingsFile
 			self.updateFromFile(settingsFile)
 		except:
 			pass

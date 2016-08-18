@@ -126,7 +126,7 @@ class test(tryout.TestSuite):
 		self.assertTrue(
 			settings.MAX_ROOT is not None)
 
-	def shouldResolveWindowsProgramVars(self):
+	def shouldResolveProgramVars(self):
 		os.environ['ARK_CONFIG'] = self.ogConfig
 		os.environ['mode'] = 'default'
 		settings = settingsManager.globalSettings()
@@ -166,13 +166,13 @@ class test(tryout.TestSuite):
 			self.assertEqual(
 				settings.MAYA_ROOT, settings.MAYA_ROOT_LINUX)
 			self.assertNotEqual(
-				settings.MAYA_ROOT, settings.MAYA_ROOT_LINUX)
+				settings.MAYA_ROOT, settings.MAYA_ROOT_WIN)
 			self.assertTrue(
 				settings.MODO_ROOT is not False)
 			self.assertEqual(
 				settings.MODO_ROOT, settings.MODO_ROOT_LINUX)
 			self.assertNotEqual(
-				settings.MODO_ROOT, settings.MODO_ROOT_LINUX)
+				settings.MODO_ROOT, settings.MODO_ROOT_WIN)
 
 			self.assertEqual(
 				settings.VRAY_EXE, '/usr/local/Autodesk/Maya2016/vray/bin/vray.exe')
