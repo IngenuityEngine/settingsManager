@@ -1,9 +1,11 @@
 import os
+import sys
 
 from SettingsManager import SettingsManager
 import arkInit
 arkInit.init()
 import cOS
+import arkUtil
 
 class globalSettings(SettingsManager):
 
@@ -11,7 +13,9 @@ class globalSettings(SettingsManager):
 	setKeysOnClass = True
 
 	def __init__(self):
-		self.MODE = os.environ.get('mode', 'default').lower()
+		self.MODE = os.environ.get('mode', 'default')
+		# Note: Linux is case sensitive, so we cannot lower the mode
+		# self.MODE = os.environ.get('mode', 'default').lower()
 		super(globalSettings, self).__init__('default')
 
 	# runSetupScript handles all constants which need to be
@@ -35,6 +39,33 @@ class globalSettings(SettingsManager):
 		self.setComputerInfo()
 		self.setNetworkInfo()
 		self.setTempFolder()
+
+	# handle WIN/LINUX paths
+	# if this computer is Linux, find all *_LINUX keys in self.settings
+	# and modify to regular
+	# if computers, find all *_WIN keys and modify to regular
+	# NUKE_ROOT_WIN and NUKE_ROOT_LINUX --> NUKE_ROOT
+	def handlePlatforms(self):
+		if cOS.isWindows():
+			for key, value in self.settings.iteritems():
+				if key.endswith('_WIN'):
+					newKey = key[:-4]
+					self.settings[newKey] = value
+		elif cOS.isLinux():
+			for key, value in self.settings.iteritems():
+				if key.endswith('_LINUX'):
+					newKey = key[:-6]
+					self.settings[newKey] = value
+		else:
+			raise Exception('Not yet applicable for operating system:', sys.platform)
+
+	# Override inherited function updateFromFile to additionally call
+	# handlePlatforms - resolving Linux/Windows vars
+	def updateFromFile(self, filename):
+		with open(filename) as f:
+			settings = arkUtil.parseJSON(f)
+			self.updateSettings(settings)
+		self.handlePlatforms()
 
 	# overrideSettings gets overriden as global settings does
 	# not follow the <app>.<user>.json naming conventino
@@ -62,8 +93,10 @@ class globalSettings(SettingsManager):
 			self.settings['SHARED_ROOT'] = \
 				'/Volumes/rambuglar_work/'
 		elif cOS.isLinux():
+			# Note: ramburglar is mounted to /mnt/ramb/
+			# Should always be symlinked to /ramburglar/
 			self.settings['SHARED_ROOT'] = \
-				'/mnt/ramb/'
+				'/ramburglar/'
 
 		# print 'SHARED_ROOT:', \
 		# 	self.settings['SHARED_ROOT']
@@ -83,8 +116,10 @@ class globalSettings(SettingsManager):
 			self.settings['ASSETS_ROOT'] = \
 				'/Volumes/raidcharles/work/'
 		elif cOS.isLinux():
+			# Note: raidcharles is mounted to /mnt/raid/
+			# Should always be symlinked to /raidcharles/
 			self.settings['ASSETS_ROOT'] = \
-				'/mnt/raid/work/'
+				'/raidcharles/'
 
 		# print 'ASSETS_ROOT:', \
 		# 	self.settings['ASSETS_ROOT']
@@ -118,7 +153,13 @@ class globalSettings(SettingsManager):
 				os.environ.get('COMPUTER_LOCATION', 'local')
 		elif cOS.isLinux() or cOS.isMac():
 			# cross platform user root
-			self.settings['USER_ROOT'] = \
+			if cOS.isLinux():
+				# fix: hardcoded hax currently 
+				# as if setup run as root, os.path.expanduser('~')
+				# will return /root/
+				self.settings['USER_ROOT'] = '/home/ie/'
+			elif cOS.isMac():
+				self.settings['USER_ROOT'] = \
 				cOS.normalizeDir(os.path.expanduser('~'))
 			self.settings['OS_USERNAME'] = \
 				os.environ.get('USER')
