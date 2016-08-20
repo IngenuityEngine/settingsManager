@@ -153,7 +153,13 @@ class globalSettings(SettingsManager):
 				os.environ.get('COMPUTER_LOCATION', 'local')
 		elif cOS.isLinux() or cOS.isMac():
 			# cross platform user root
-			self.settings['USER_ROOT'] = \
+			if cOS.isLinux():
+				# fix: hardcoded hax currently 
+				# as if setup run as root, os.path.expanduser('~')
+				# will return /root/
+				self.settings['USER_ROOT'] = '/home/ie/'
+			elif cOS.isMac():
+				self.settings['USER_ROOT'] = \
 				cOS.normalizeDir(os.path.expanduser('~'))
 			self.settings['OS_USERNAME'] = \
 				os.environ.get('USER')
