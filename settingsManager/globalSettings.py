@@ -154,10 +154,12 @@ class globalSettings(SettingsManager):
 		elif cOS.isLinux() or cOS.isMac():
 			# cross platform user root
 			if cOS.isLinux():
-				# fix: hardcoded hax currently 
+				# fix: hax, just defaults to the first user on the machine
 				# as if setup run as root, os.path.expanduser('~')
 				# will return /root/
-				self.settings['USER_ROOT'] = '/home/ie/'
+				usernames = os.listdir('/home')
+				self.settings['USER_ROOT'] = cOS.normalizeDir(
+					'/home/' + usernames[0])
 			elif cOS.isMac():
 				self.settings['USER_ROOT'] = \
 				cOS.normalizeDir(os.path.expanduser('~'))
@@ -203,8 +205,7 @@ class globalSettings(SettingsManager):
 			self.settings['TEMP'] = \
 				'c:/temp/'
 		elif cOS.isMac() or cOS.isLinux():
-			self.settings['TEMP'] = \
-				'/var/temp/'
+			self.settings['TEMP'] = self.settings['USER_ROOT'] + 'temp/'
 
 		# ensure the temp directory exists
 		cOS.makeDirs(self.settings['TEMP'])
