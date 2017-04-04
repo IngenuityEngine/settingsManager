@@ -100,6 +100,6 @@ save: function(callback)
 	if (self._user)
 		query = query.where('user', 'is', self._user)
 	query.execute(callback)
-
 }
+
 })
