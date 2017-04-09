@@ -36,8 +36,10 @@ init: function(searchPaths, modes)
 		})
 	})
 
-	// finally merge the args in overtop of everything
+	// finally merge the args and process.env in overtop of everything
+	_.merge(self, process.env)
 	_.merge(self, args)
+	_.merge(self.settings, process.env)
 	_.merge(self.settings, args)
 }
 })
