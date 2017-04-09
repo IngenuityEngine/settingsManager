@@ -14,12 +14,13 @@
     "test/test_settingsManager.js"
   ],
   "dependencies": {
+    "arkutil": "*",
     "async": "*",
     "debug": "*",
-    "arkutil": "*",
     "expect.js": "*",
-    "uberclass": "^1.0.1",
     "lodash": "^4",
+    "optimist": "^0.6.1",
+    "uberclass": "^1.0.1",
     "underscore.string": "^3"
   },
   "devDependencies": {
