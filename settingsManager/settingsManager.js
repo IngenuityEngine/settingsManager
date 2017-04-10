@@ -9,6 +9,7 @@ module.exports = Class.extend({
 init: function(database, settingsKeys, user, callback)
 {
 	_.bindAll(this, _.functionsIn(this))
+
 	this._database = database
 	this._user = user
 	this._save = this.save
