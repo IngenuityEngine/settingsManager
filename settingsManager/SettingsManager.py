@@ -135,7 +135,6 @@ class SettingsManager(Settings):
 		for f in [f for f in os.listdir(os.environ['ARK_CONFIG']) if os.path.isfile(f)]:
 			self.filename = os.environ['ARK_CONFIG'] + '/' + f
 			try:
-				print
 				self.updateFromFile(self.filename)
 			except:
 				pass
