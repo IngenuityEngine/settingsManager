@@ -27,7 +27,7 @@ class SettingsManager(Settings):
 		self.customSettings = {}
 
 		self.rootDir = cOS.ensureEndingSlash(
-			os.environ.get('ARK_CONFIG'))
+			os.environ.get('ARK_ROOT') + '/ark/config')
 
 		# set the file we're trying to load
 		self.filename = self.getFilename(appName)
@@ -128,6 +128,17 @@ class SettingsManager(Settings):
 			pass
 			# raise IOError('This user does not exist yet!')
 
+	def getUserSettings(self):
+		if not self.user:
+			return
+
+		for f in [f for f in os.listdir(os.environ['ARK_CONFIG']) if os.path.isfile(f)]:
+			self.filename = os.environ['ARK_CONFIG'] + '/' + f
+			try:
+				print
+				self.updateFromFile(self.filename)
+			except:
+				pass
 
 	def set(self, key, value=None):
 		# if we have key value, make a new dict
