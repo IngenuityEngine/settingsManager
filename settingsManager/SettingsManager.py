@@ -133,7 +133,8 @@ class SettingsManager(Settings):
 		if not self.user:
 			return
 
-		for f in [f for f in os.listdir(os.environ['ARK_CONFIG']) if os.path.isfile(f)]:
+		# get all files in HOME/Config/
+		for f in [f for f in os.listdir(os.environ['ARK_CONFIG'])]:
 			self.filename = os.environ['ARK_CONFIG'] + '/' + f
 			try:
 				self.updateFromFile(self.filename)
