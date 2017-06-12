@@ -48,6 +48,7 @@ class SettingsManager(Settings):
 
 		# try to load additional settings based on
 		# user, mode, etc
+		self.getUserSettings()
 		self.overrideSettings()
 		self.updateSettings()
 
