@@ -30,7 +30,7 @@ class SettingsManager(Settings):
 
 		# set the file we're trying to load
 		appName = arkUtil.makeWebSafe(appName)
-		self.filename = os.environ.get('ARK_ROOT') + 'ark/config/' + appName + '.json'
+		self.filename = self.getFilename(appName)
 
 		# load it then run setup
 		# (setup currently only does anything
@@ -41,9 +41,9 @@ class SettingsManager(Settings):
 		# rest of the settings, ex: ARK_ROOT
 		self.setup()
 		try:
-			self.updateFromFile(self.filename)
+			self.updateFromFile(os.environ.get('ARK_ROOT') + 'ark/config/' + appName + '.json')
 		except:
-			print 'No settings exist for:', self.filename
+			print 'No settings exist for:', os.environ.get('ARK_ROOT') + 'ark/config/' + appName + '.json'
 			pass
 
 		# try to load additional settings based on
