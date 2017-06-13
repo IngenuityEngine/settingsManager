@@ -17,15 +17,15 @@ class test(tryout.TestSuite):
 		cOS.copyTree(sourcePath, self.configPath)
 
 	def setUp(self):
-		self.ogConfig = os.environ.get('ARK_CONFIG')
+		self.ogConfig = os.environ.get('USER_CONFIG')
 		self.ogMode = os.environ.get('mode')
 		configPath = cOS.getDirName(os.path.realpath(__file__)) + 'config'
-		os.environ['ARK_CONFIG'] = configPath
+		os.environ['USER_CONFIG'] = configPath
 		os.environ['mode'] = 'default'
 
 	def tearDown(self):
 		if self.ogConfig:
-			os.environ['ARK_CONFIG'] = self.ogConfig
+			os.environ['USER_CONFIG'] = self.ogConfig
 		if self.ogMode:
 			os.environ['mode'] = self.ogMode
 

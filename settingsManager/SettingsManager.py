@@ -134,8 +134,8 @@ class SettingsManager(Settings):
 			return
 
 		# get all files in HOME/Config/
-		for f in [f for f in os.listdir(os.environ['ARK_CONFIG'])]:
-			self.filename = os.environ['ARK_CONFIG'] + '/' + f
+		for f in [f for f in os.listdir(os.environ['USER_CONFIG'])]:
+			self.filename = os.environ['USER_CONFIG'] + '/' + f
 			try:
 				self.updateFromFile(self.filename)
 			except:

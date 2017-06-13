@@ -23,7 +23,7 @@ class globalSettings(SettingsManager):
 	# found by lookups in env variable or other means
 		self.set({
 			'ARK_ROOT': os.environ.get('ARK_ROOT'),
-			'ARK_CONFIG': os.environ.get('ARK_CONFIG'),
+			'USER_CONFIG': os.environ.get('USER_CONFIG'),
 			'ARK_PYTHON': os.environ.get('ARK_PYTHON'),
 			'ARK_PYTHONLIB': os.environ.get('ARK_PYTHONLIB'),
 		})
