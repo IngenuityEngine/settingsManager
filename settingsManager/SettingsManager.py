@@ -26,7 +26,7 @@ class SettingsManager(Settings):
 		self.settings = {}
 		self.customSettings = {}
 
-		self.rootDir = cOS.ensureEndingSlash(os.environ.get('USER_CONFIG'))
+		self.rootDir = cOS.ensureEndingSlash(os.environ.get('ARK_CONFIG'))
 
 		# set the file we're trying to load
 		appName = arkUtil.makeWebSafe(appName)
