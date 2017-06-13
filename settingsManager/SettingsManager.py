@@ -26,11 +26,11 @@ class SettingsManager(Settings):
 		self.settings = {}
 		self.customSettings = {}
 
-		self.rootDir = cOS.ensureEndingSlash(
-			os.environ.get('ARK_ROOT') + '/ark/config')
+		self.rootDir = cOS.ensureEndingSlash(os.environ.get('USER_CONFIG'))
 
 		# set the file we're trying to load
-		self.filename = self.getFilename(appName)
+		appName = arkUtil.makeWebSafe(appName)
+		self.filename = os.environ.get('ARK_ROOT') + 'ark/config/' + appName + '.json'
 
 		# load it then run setup
 		# (setup currently only does anything
@@ -48,7 +48,6 @@ class SettingsManager(Settings):
 
 		# try to load additional settings based on
 		# user, mode, etc
-		self.getUserSettings()
 		self.overrideSettings()
 		self.updateSettings()
 
@@ -128,18 +127,6 @@ class SettingsManager(Settings):
 		except:
 			pass
 			# raise IOError('This user does not exist yet!')
-
-	def getUserSettings(self):
-		if not self.user:
-			return
-
-		# get all files in HOME/Config/
-		for f in [f for f in os.listdir(os.environ['USER_CONFIG'])]:
-			self.filename = os.environ['USER_CONFIG'] + '/' + f
-			try:
-				self.updateFromFile(self.filename)
-			except:
-				pass
 
 	def set(self, key, value=None):
 		# if we have key value, make a new dict
