@@ -40,10 +40,11 @@ class SettingsManager(Settings):
 		# that are then used when loading the
 		# rest of the settings, ex: ARK_ROOT
 		self.setup()
+		defaultFile = os.environ.get('ARK_ROOT') + 'ark/config/' + appName + '.json'
 		try:
-			self.updateFromFile(os.environ.get('ARK_ROOT') + 'ark/config/' + appName + '.json')
+			self.updateFromFile(defaultFile)
 		except:
-			print 'No settings exist for:', os.environ.get('ARK_ROOT') + 'ark/config/' + appName + '.json'
+			print 'No settings exist for:', defaultFile
 			pass
 
 		# try to load additional settings based on
