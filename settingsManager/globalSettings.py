@@ -185,7 +185,7 @@ class globalSettings(SettingsManager):
 					os.environ.get('COMPUTER_TYPE')
 			elif 'RENDER' in os.environ['COMPUTERNAME']:
 				self.settings['COMPUTER_TYPE'] = 'render'
-			elif 'TC' in os.environ['COMPUTERNAME']:
+			elif os.environ['COMPUTERNAME'].startswith('TC'):
 				self.settings['COMPUTER_TYPE'] = 'transcode'
 			elif os.path.exists(os.environ.get('ARK_ROOT') + 'ark/.git'):
 				self.settings['COMPUTER_TYPE'] = 'developer'
