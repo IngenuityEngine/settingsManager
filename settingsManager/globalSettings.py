@@ -9,7 +9,7 @@ import arkUtil
 
 class globalSettings(SettingsManager):
 
-	nodeTypes = ['render']
+	nodeTypes = ['render', 'transcode']
 	setKeysOnClass = True
 
 	def __init__(self, appName='default', user=None):
