@@ -9,14 +9,57 @@ import arkUtil
 
 class globalSettings(SettingsManager):
 
-	nodeTypes = ['render']
+	nodeTypes = ['render', 'transcode']
 	setKeysOnClass = True
 
-	def __init__(self):
+	def __init__(self, appName='default', user=None):
 		self.MODE = os.environ.get('mode', 'default')
 		# Note: Linux is case sensitive, so we cannot lower the mode
 		# self.MODE = os.environ.get('mode', 'default').lower()
-		super(globalSettings, self).__init__('default')
+		# super(globalSettings, self).__init__('default')
+
+		# store the basics
+		self.appName = appName
+		self.user = user
+		self.settings = {}
+		self.customSettings = {}
+
+		self.rootDir = cOS.ensureEndingSlash(os.environ.get('ARK_CONFIG'))
+
+		# set the file we're trying to load
+		appName = arkUtil.makeWebSafe(appName)
+		self.filename = self.getFilename(appName)
+
+		# load it then run setup
+		# (setup currently only does anything
+		# for global settings)
+		# setup() is called before the initial load.
+		# the idea is that setup is setting variables
+		# that are then used when loading the
+		# rest of the settings, ex: ARK_ROOT
+		self.setup()
+		defaultFile = os.environ.get('ARK_ROOT') + 'ark/config/' + appName + '.json'
+		try:
+			self.updateFromFile(defaultFile)
+		except:
+			print 'No settings exist for:', defaultFile
+			pass
+
+		# for global settings also load
+		defaultFile = os.environ.get('ARK_ROOT') + 'ark/config/' + self.MODE + '.json'
+		try:
+			self.updateFromFile(defaultFile)
+		except:
+			print 'No settings exist for:', defaultFile
+			pass
+
+		# try to load additional settings based on
+		# user, mode, etc
+		self.overrideSettings()
+		self.updateSettings()
+
+		if not self.user:
+			self.customSettings = self.settings
 
 	# runSetupScript handles all constants which need to be
 	def setup(self):
@@ -142,6 +185,8 @@ class globalSettings(SettingsManager):
 					os.environ.get('COMPUTER_TYPE')
 			elif 'RENDER' in os.environ['COMPUTERNAME']:
 				self.settings['COMPUTER_TYPE'] = 'render'
+			elif os.environ['COMPUTERNAME'].startswith('TC'):
+				self.settings['COMPUTER_TYPE'] = 'transcode'
 			elif os.path.exists(os.environ.get('ARK_ROOT') + 'ark/.git'):
 				self.settings['COMPUTER_TYPE'] = 'developer'
 			else:
@@ -176,6 +221,8 @@ class globalSettings(SettingsManager):
 					os.environ.get('COMPUTER_TYPE')
 			elif 'RENDER' in os.environ['HOSTNAME']:
 				self.settings['COMPUTER_TYPE'] = 'render'
+			elif 'TC' in os.environ['HOSTNAME']:
+				self.settings['COMPUTER_TYPE'] = 'transcode'
 			else:
 				self.settings['COMPUTER_TYPE'] = 'workstation'
 
