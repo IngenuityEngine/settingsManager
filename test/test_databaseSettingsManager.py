@@ -24,7 +24,7 @@ class test(tryout.TestSuite):
 		# Note: different port number is because database
 		# is being run from caretaker which is where the
 		# entitydef for settings lives
-		self.database = Database(databaseUrl, keepTrying=False)
+		self.database = Database(databaseUrl, keepTrying=True)
 		self.database.connect()
 		# create a testing user
 		self.database.create(
