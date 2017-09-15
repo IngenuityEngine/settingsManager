@@ -8,5 +8,5 @@ def getSettings(appName='default', user=None):
 
 def databaseSettings(appName='default', user=None):
 	from database import Database
-	database = Database(keepTrying=False)
+	database = Database(keepTrying=True)
 	return DatabaseSettingsManager(database, appName, user)
