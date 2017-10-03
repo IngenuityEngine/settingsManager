@@ -9,7 +9,7 @@ import arkUtil
 
 class globalSettings(SettingsManager):
 
-	nodeTypes = ['render']
+	nodeTypes = ['render', 'transcode']
 	setKeysOnClass = True
 
 	def __init__(self, appName='default', user=None):
@@ -185,6 +185,8 @@ class globalSettings(SettingsManager):
 					os.environ.get('COMPUTER_TYPE')
 			elif 'RENDER' in os.environ['COMPUTERNAME']:
 				self.settings['COMPUTER_TYPE'] = 'render'
+			elif os.environ['COMPUTERNAME'].startswith('TC'):
+				self.settings['COMPUTER_TYPE'] = 'transcode'
 			elif os.path.exists(os.environ.get('ARK_ROOT') + 'ark/.git'):
 				self.settings['COMPUTER_TYPE'] = 'developer'
 			else:
@@ -219,6 +221,8 @@ class globalSettings(SettingsManager):
 					os.environ.get('COMPUTER_TYPE')
 			elif 'RENDER' in os.environ['HOSTNAME']:
 				self.settings['COMPUTER_TYPE'] = 'render'
+			elif 'TC' in os.environ['HOSTNAME']:
+				self.settings['COMPUTER_TYPE'] = 'transcode'
 			else:
 				self.settings['COMPUTER_TYPE'] = 'workstation'
 
