@@ -7,7 +7,16 @@ arkInit.init()
 import cOS
 import arkUtil
 
-class globalSettings(SettingsManager):
+currentSettings = None
+
+def globalSettings(appName='default', user=None):
+	global currentSettings
+	if not currentSettings:
+		currentSettings = GlobalSettings(appName=appName, user=user)
+
+	return currentSettings
+
+class GlobalSettings(SettingsManager):
 
 	nodeTypes = ['render', 'transcode']
 	setKeysOnClass = True
@@ -47,6 +56,19 @@ class globalSettings(SettingsManager):
 
 		# for global settings also load
 		defaultFile = os.environ.get('ARK_ROOT') + 'ark/config/' + self.MODE + '.json'
+		try:
+			self.updateFromFile(defaultFile)
+		except:
+			print 'No settings exist for:', defaultFile
+			pass
+
+		# for global settings also load
+		if cOS.isLinux():
+			homedir = '/home/'
+		elif cOS.isWindows():
+			homedir = os.getenv('HOME')
+
+		defaultFile = cOS.ensureEndingSlash(homedir) + 'config/' + self.MODE + '.json'
 		try:
 			self.updateFromFile(defaultFile)
 		except:
