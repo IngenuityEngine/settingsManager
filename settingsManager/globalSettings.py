@@ -64,7 +64,9 @@ class GlobalSettings(SettingsManager):
 
 		# for global settings also load
 		if cOS.isLinux():
-			homedir = '/home/'
+			usernames = os.listdir('/home')
+			# fix: shouldn't just default to first user, but works currently
+			homedir = '/home/' + usernames[0] + '/'
 		elif cOS.isWindows():
 			homedir = os.getenv('HOME')
 
